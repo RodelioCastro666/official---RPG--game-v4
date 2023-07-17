@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VendorWindow : MonoBehaviour
 {
@@ -11,8 +12,19 @@ public class VendorWindow : MonoBehaviour
     [SerializeField]
     private VendorButton[] vendorButtons;
 
-    public void Open()
+    [SerializeField]
+    private Text pageNumber;
+
+    private Vendor vendor;
+
+    private int pageIndex;
+
+    private List<List<VendorItem>> pages = new List<List<VendorItem>>();
+
+
+    public void Open(Vendor vendor)
     {
+        this.vendor = vendor;
         canvasGroup.alpha = 1;
         canvasGroup.blocksRaycasts = true;
 
@@ -20,17 +32,72 @@ public class VendorWindow : MonoBehaviour
 
     public void Close()
     {
-        {
-            canvasGroup.alpha = 0;
-            canvasGroup.blocksRaycasts = false;
-        }
+
+        vendor.IsOpen = false;
+        canvasGroup.alpha = 0;
+        canvasGroup.blocksRaycasts = false;
+        vendor = null;
+        
     }
 
     public void CreatePages(VendorItem[] items)
     {
-        for(int i = 0; i < items.Length; i++)
+        pages.Clear();
+
+        List<VendorItem> page = new List<VendorItem>();
+
+        for (int i = 0; i < items.Length; i++)
         {
-            vendorButtons[i].AddItem(items[i]);
+            page.Add(items[i]);
+
+            if (page.Count == 10  || i == items.Length -1)
+            {
+                pages.Add(page);
+                page = new List<VendorItem>();
+            }
+        }
+        AddItems();
+    }
+
+    public void AddItems()
+    {
+        pageNumber.text = pageIndex + 1 + "/" + pages.Count;
+
+        if (pages.Count > 0)
+        {
+            for (int i = 0; i < pages[pageIndex].Count; i++)
+            {
+                if (pages[pageIndex][i] != null)
+                {
+                    vendorButtons[i].AddItem(pages[pageIndex][i]);
+                }
+            }
+        }
+    }
+
+    public void Nextpage()
+    {
+        if (pageIndex < pages.Count -1)
+        {
+            ClearButtons();
+            pageIndex++;
+            AddItems();
+
+        }
+    }
+
+    public void PreviousPage()
+    {
+        ClearButtons();
+        pageIndex--;
+        AddItems();
+    }
+
+    public void ClearButtons()
+    {
+        foreach (VendorButton btn in vendorButtons)
+        {
+            btn.gameObject.SetActive(false);
         }
     }
 }

@@ -38,15 +38,17 @@ public class Chest : MonoBehaviour, IInteractable
 
     public void StopInteract()
     {
+
         if (isOpen)
         {
             StoreItems();
+            bag.Clear();
+            isOpen = false;
+            spriteRenderer.sprite = closeSprite;
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.alpha = 0;
         }
-        bag.Clear();
-        isOpen = false;
-        spriteRenderer.sprite = closeSprite;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.alpha = 0;
+        
     }
 
     public void AddItems()

@@ -310,6 +310,9 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 93ea98dfae58c2846b251292cb1f33e5, type: 2}
     quantity: 0
     unlimited: 1
+  - item: {fileID: 11400000, guid: 19846bf649d25244c970a58559a6147a, type: 2}
+    quantity: 4
+    unlimited: 0
   vendorWindow: {fileID: 907313318}
 --- !u!58 &54651038
 CircleCollider2D:
