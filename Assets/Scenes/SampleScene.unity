@@ -307,10 +307,40 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 794de64bd2dc57247a8b42e165519512, type: 2}
     quantity: 0
     unlimited: 1
-  - item: {fileID: 11400000, guid: 93ea98dfae58c2846b251292cb1f33e5, type: 2}
+  - item: {fileID: 11400000, guid: a5111c388c554dc4da79d3ef79745f83, type: 2}
     quantity: 0
     unlimited: 1
+  - item: {fileID: 11400000, guid: 93ea98dfae58c2846b251292cb1f33e5, type: 2}
+    quantity: 4
+    unlimited: 0
   - item: {fileID: 11400000, guid: 19846bf649d25244c970a58559a6147a, type: 2}
+    quantity: 4
+    unlimited: 0
+  - item: {fileID: 11400000, guid: b270ac205f263e2448d88515a1c8cf90, type: 2}
+    quantity: 4
+    unlimited: 0
+  - item: {fileID: 11400000, guid: fa4f28e9c9d174744afa9996925e0a01, type: 2}
+    quantity: 0
+    unlimited: 1
+  - item: {fileID: 11400000, guid: 695d4fb63df308b449fad4f800eeb77e, type: 2}
+    quantity: 4
+    unlimited: 0
+  - item: {fileID: 11400000, guid: 6887c982ca4d3934a95b85eeac8497fb, type: 2}
+    quantity: 4
+    unlimited: 0
+  - item: {fileID: 11400000, guid: d9a2c4e701d4d1b47b792bab79050d34, type: 2}
+    quantity: 0
+    unlimited: 1
+  - item: {fileID: 11400000, guid: ecfbb15d7a8fa8a45a621974e8b0652b, type: 2}
+    quantity: 0
+    unlimited: 1
+  - item: {fileID: 11400000, guid: bb832dd4d3ac1fd4d9c21091baebd17b, type: 2}
+    quantity: 4
+    unlimited: 0
+  - item: {fileID: 11400000, guid: aa05da48f6c555c47bfa05520b19292f, type: 2}
+    quantity: 4
+    unlimited: 0
+  - item: {fileID: 11400000, guid: 873b512f63f173e4db8cfb84c59b2b66, type: 2}
     quantity: 4
     unlimited: 0
   vendorWindow: {fileID: 907313318}
@@ -2839,7 +2869,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1210473996}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4452,9 +4482,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LootWindow, Assembly-CSharp
-        m_MethodName: PreviuosPage
+      - m_Target: {fileID: 907313318}
+        m_TargetAssemblyTypeName: VendorWindow, Assembly-CSharp
+        m_MethodName: PreviousPage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9037,7 +9067,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 907313313}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9049,11 +9079,11 @@ RectTransform:
   - {fileID: 1756987957}
   - {fileID: 1464406684}
   m_Father: {fileID: 1210473996}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -201.62239, y: -24.537903}
+  m_AnchoredPosition: {x: -201.62242, y: -24.537895}
   m_SizeDelta: {x: 459.2956, y: 277.6366}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &907313315
@@ -9130,6 +9160,7 @@ MonoBehaviour:
   - {fileID: 369037910}
   - {fileID: 404847727}
   - {fileID: 1806024856}
+  pageNumber: {fileID: 1464406685}
 --- !u!1 &914706382
 GameObject:
   m_ObjectHideFlags: 0
@@ -12329,8 +12360,8 @@ RectTransform:
   - {fileID: 840521847}
   - {fileID: 270771586}
   - {fileID: 965043186}
-  - {fileID: 304450653}
   - {fileID: 907313314}
+  - {fileID: 304450653}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14511,7 +14542,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1/1
+  m_Text: 
 --- !u!222 &1464406686
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17381,9 +17412,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LootWindow, Assembly-CSharp
-        m_MethodName: NextPage
+      - m_Target: {fileID: 907313318}
+        m_TargetAssemblyTypeName: VendorWindow, Assembly-CSharp
+        m_MethodName: Nextpage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

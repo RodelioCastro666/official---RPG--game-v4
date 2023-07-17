@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: NIgga Helmet
   quality: 2
+  price: 23
   armorType: 0
   intellect: 100
   Strength: 100

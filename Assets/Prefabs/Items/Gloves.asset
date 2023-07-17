@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Gloves
   quality: 3
+  price: 87
   armorType: 3
   intellect: 10
   Strength: 10

@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Ring
   quality: 0
+  price: 43
   armorType: 8
   intellect: 10
   Strength: 10

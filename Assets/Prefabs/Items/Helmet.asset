@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Helmet
   quality: 1
+  price: 34
   armorType: 0
   intellect: 10
   Strength: 10

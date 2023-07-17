@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Shoulders
   quality: 0
+  price: 45
   armorType: 1
   intellect: 10
   Strength: 10

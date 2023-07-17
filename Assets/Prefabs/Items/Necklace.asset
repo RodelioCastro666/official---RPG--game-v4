@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Necklace
   quality: 3
+  price: 56
   armorType: 7
   intellect: 10
   Strength: 10

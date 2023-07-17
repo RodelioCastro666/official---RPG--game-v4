@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Sword
   quality: 0
+  price: 35
   armorType: 5
   intellect: 10
   Strength: 10

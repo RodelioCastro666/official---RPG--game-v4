@@ -16,6 +16,7 @@ MonoBehaviour:
   stackSize: 0
   title: WTF Orb
   quality: 0
+  price: 12
   armorType: 6
   intellect: 10
   Strength: 10
