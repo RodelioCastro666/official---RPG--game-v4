@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VendorWindow : MonoBehaviour
+public class VendorWindow : Window
 {
-    [SerializeField]
-    private CanvasGroup canvasGroup;
+  
 
 
     [SerializeField]
@@ -22,23 +21,7 @@ public class VendorWindow : MonoBehaviour
     private List<List<VendorItem>> pages = new List<List<VendorItem>>();
 
 
-    public void Open(Vendor vendor)
-    {
-        this.vendor = vendor;
-        canvasGroup.alpha = 1;
-        canvasGroup.blocksRaycasts = true;
-
-    }
-
-    public void Close()
-    {
-
-        vendor.IsOpen = false;
-        canvasGroup.alpha = 0;
-        canvasGroup.blocksRaycasts = false;
-        vendor = null;
-        
-    }
+    
 
     public void CreatePages(VendorItem[] items)
     {
@@ -99,5 +82,11 @@ public class VendorWindow : MonoBehaviour
         {
             btn.gameObject.SetActive(false);
         }
+    }
+
+    public override void Open(Npc npc)
+    {
+        CreatePages((npc as Vendor).MyItems);
+        base.Open(npc);
     }
 }

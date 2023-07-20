@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     private Player player;
 
 
-    private Npc currentTarget;
+    private Enemy currentTarget;
     // Update is called once per frame
     void Update()
     {
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
                     currentTarget.DeSelect();
                 }
 
-                currentTarget = hit.collider.GetComponent<Npc>();
+                currentTarget = hit.collider.GetComponent<Enemy>();
 
                 player.MyTarget = currentTarget.Select();
 

@@ -181,8 +181,9 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
                 if (HandScript.MyInstance.MyMoveable is Armor)
                 {
                     Armor armor = (Armor)HandScript.MyInstance.MyMoveable;
-                    AddItem(armor);
+                    
                     CharacterPanel.MyInstance.MySelectedButton.DequipArmor();
+                    AddItem(armor);
                     HandScript.MyInstance.Drop();
                 }
 
@@ -249,8 +250,9 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
                 if (HandScript.MyInstance.MyMoveable is Armor)
                 {
                     Armor armor= (Armor)HandScript.MyInstance.MyMoveable;
-                    AddItem(armor);
+                    
                     CharacterPanel.MyInstance.MySelectedButton.DequipArmor();
+                    AddItem(armor);
                     HandScript.MyInstance.Drop();
                 }
 
@@ -381,11 +383,20 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
 
     public void Clear()
     {
-        if (MyItems.Count > 0)
+        int intCount = MyItems.Count;
+
+
+        if (intCount > 0)
         {
-            InventoryScripts.MyInstance.OnItemCountChanged(MyItems.Pop());
-            MyItems.Clear();
+            for (int i = 0; i < intCount; i++)
+            {
+                InventoryScripts.MyInstance.OnItemCountChanged(MyItems.Pop());
+            }
         }
+
+
+
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)

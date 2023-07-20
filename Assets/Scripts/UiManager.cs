@@ -101,7 +101,7 @@ public class UiManager : MonoBehaviour
 
    
 
-    public void ShowTargetFrame(Npc target)
+    public void ShowTargetFrame(Enemy target)
     {
         targetFrame.SetActive(true);
         healthStat.Initialize(target.MyHealth.MyCurrentValue, target.MyHealth.MyMaxValue);

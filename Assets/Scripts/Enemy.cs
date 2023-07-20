@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Npc
+public delegate void HealthChanged(float health);
+
+public delegate void CharacterRemoved();
+
+public class Enemy : Character, IInteractable
 {
+    public event HealthChanged healthChanged;
+
+    public event CharacterRemoved characterRemoved;
+
 
     [SerializeField]
     private CanvasGroup healthGroup;
@@ -33,6 +41,11 @@ public class Enemy : Npc
 
     public float MyAttackTime { get; set; }
 
+    [SerializeField]
+    private Sprite portrait;
+
+    public Sprite MyPortrait { get => portrait; }
+
     protected override void Update()
     {
         if (IsAlive)
@@ -50,19 +63,23 @@ public class Enemy : Npc
 
     }
 
-    public override Transform Select()
+    public Transform Select()
     {
         healthGroup.alpha = 1;
 
-        return base.Select();
+        return hitBox;
+
     }
 
-    public override void DeSelect()
+    public  void DeSelect()
     {
         healthGroup.alpha = 0;
+        healthChanged -= new HealthChanged(UiManager.MyInstance.UpdateTargetFrame);
+        characterRemoved -= new CharacterRemoved(UiManager.MyInstance.HideTargetFrame);
 
-        base.DeSelect();
+        
     }
+   
 
     public override void TakeDamage(float damage, Transform source)
     {
@@ -117,7 +134,7 @@ public class Enemy : Npc
         OnHealthChanged(health.MyCurrentValue);
     }
 
-    public override void Interact()
+    public  void Interact()
     {
         if (!IsAlive)
         {
@@ -126,8 +143,26 @@ public class Enemy : Npc
 
     }
 
-    public override void StopInteract()
+    public  void StopInteract()
     {
         LootWindow.MyInstance.Close();
+    }
+
+    public void OnHealthChanged(float health)
+    {
+        if (healthChanged != null)
+        {
+            healthChanged(health);
+        }
+    }
+
+    public void OnCharacterRemoved()
+    {
+        if (characterRemoved != null)
+        {
+            characterRemoved();
+        }
+
+        Destroy(gameObject);
     }
 }
