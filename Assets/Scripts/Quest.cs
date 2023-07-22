@@ -15,7 +15,10 @@ public class Quest
     [SerializeField]
     private CollectObjective[] collectObjectives;
 
-  
+    [SerializeField]
+    private KillObjective[] killObjectives;
+
+
 
     public QuestScript MyQuestScript { get; set; }
 
@@ -35,7 +38,15 @@ public class Quest
                 if (!o.IsComplete)
                 {
                     return false;
-                    Debug.Log("4");
+                  
+                }
+            }
+            foreach (Objective o in MyKillObjectives)
+            {
+                if (!o.IsComplete)
+                {
+                    return false;
+                   
                 }
             }
 
@@ -43,17 +54,7 @@ public class Quest
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame 
-    void Update()
-    {
-
-    }
+    public KillObjective[] MyKillObjectives { get => killObjectives;  }
 }
 
 [System.Serializable]
@@ -94,6 +95,44 @@ public class CollectObjective : Objective
         if (MyType.ToLower() == item.MyTitle.ToLower())
         {
             MyCurrenAmount = InventoryScripts.MyInstance.GetItemCount(item.MyTitle);
+
+            if (MyCurrenAmount <= MyAmount)
+            {
+                MessageFeedManager.MyInstace.WriteMessage(string.Format("{0}: {1}/{2}", item.MyTitle, MyCurrenAmount, MyAmount));
+            }
+
+           
+            QuestLog.MyInstance.UpdateSelected();
+            QuestLog.MyInstance.CheckCompletion();
+        }
+    }
+    public void UpdateItemCount()
+    {
+        MyCurrenAmount = InventoryScripts.MyInstance.GetItemCount(MyType);
+        QuestLog.MyInstance.UpdateSelected();
+        QuestLog.MyInstance.CheckCompletion();
+    }
+
+    public void Complete()
+    {
+        Stack<Item> items = InventoryScripts.MyInstance.GetItems(MyType, MyAmount);
+
+        foreach(Item item in items)
+        {
+            item.Remove();
+        }
+    }
+}
+
+[System.Serializable]
+public class KillObjective : Objective
+{
+    public void UpdateKilleCount(Character character)
+    {
+        if (MyType == character.MyType)
+        {
+            MyCurrenAmount++;
+            MessageFeedManager.MyInstace.WriteMessage(string.Format("{0}: {1}/{2}", MyType, MyCurrenAmount, MyAmount));
             QuestLog.MyInstance.UpdateSelected();
             QuestLog.MyInstance.CheckCompletion();
         }

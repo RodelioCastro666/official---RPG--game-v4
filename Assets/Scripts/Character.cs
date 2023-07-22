@@ -10,6 +10,9 @@ public class Character : MonoBehaviour
     [SerializeField]
     private float speed;
 
+    [SerializeField]
+    private string type;
+
     private Vector2 direction;
 
     private Rigidbody2D myRigidbody;
@@ -57,6 +60,8 @@ public class Character : MonoBehaviour
     public Vector2 Direction { get => direction; set => direction = value; }
 
     public float Speed { get => speed; set => speed = value; }
+
+    public string MyType { get => type;  }
 
     protected virtual void Start()
     {
@@ -151,6 +156,7 @@ public class Character : MonoBehaviour
         {
             myRigidbody.velocity = Direction;
             myRigidbody.velocity = Direction;
+            GameManager.MyInstance.OnKillConfirmed(this);
             MyAnimator.SetTrigger("die");
         }
     }

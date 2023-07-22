@@ -6,8 +6,8 @@ public class QGQuestScripts : MonoBehaviour
 {
     public Quest MyQuest { get; set; }
 
-    public void Selected()
+    public void Select()
     {
-        
+        QuestGiverWindow.MyInstance.ShowQuestInfo(MyQuest);
     }
 }

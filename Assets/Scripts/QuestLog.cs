@@ -16,8 +16,12 @@ public class QuestLog : MonoBehaviour
 
     private Quest selected;
 
+    [SerializeField]
+    private CanvasGroup canvasGroup;
+
     private List<QuestScript> questScripts = new List<QuestScript>();
 
+    private List<Quest> quests = new List<Quest>();
 
     private static QuestLog instance;
 
@@ -36,28 +40,27 @@ public class QuestLog : MonoBehaviour
         
     }
 
-    void Start()
+    public void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            OpenClose();
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    
 
     public void AcceptQuest(Quest quest)
     {
         foreach (CollectObjective o in quest.MyCollectObjectives)
         {
-            InventoryScripts.MyInstance.itemCountChanged += new ItemCountChanged(o.UpdateItemCount);
-            
+            InventoryScripts.MyInstance.itemCountChangedEvent += new ItemCountChanged(o.UpdateItemCount);
+            o.UpdateItemCount();
         }
-        
+        foreach (KillObjective o in quest.MyKillObjectives)
+        {
+            GameManager.MyInstance.killConfirmedEvent += new KillConfirmed(o.UpdateKilleCount);
+        }
 
+        quests.Add(quest);
         GameObject go = Instantiate(questPrefab, questParent);
 
         QuestScript qs = go.GetComponent<QuestScript>();
@@ -66,7 +69,7 @@ public class QuestLog : MonoBehaviour
         questScripts.Add(qs);
         go.GetComponent<Text>().text = quest.MyTitle;
 
-      
+        CheckCompletion();
 
     }
     
@@ -94,6 +97,10 @@ public class QuestLog : MonoBehaviour
             {
                 objectives += obj.MyType + ": " + obj.MyCurrenAmount + "/" + obj.MyAmount + "\n";
             }
+            foreach (Objective obj in quest.MyKillObjectives)
+            {
+                objectives += obj.MyType + ": " + obj.MyCurrenAmount + "/" + obj.MyAmount + "\n";
+            }
 
             questDescription.text = string.Format("{0} \n<size=10>{1}</size>\nObjectives\n<size=10>{2}</size>", title, quest.MyDescription, objectives);
         }
@@ -103,11 +110,42 @@ public class QuestLog : MonoBehaviour
 
     public void CheckCompletion()
     {
-        Debug.Log("2");
+        
         foreach (QuestScript qs in questScripts)
         {
             qs.IsComplete();
-            Debug.Log("1");
+           
         }
+    }
+
+    public void OpenClose()
+    {
+        if (canvasGroup.alpha == 1)
+        {
+            Close();
+        }
+        else
+        {
+            canvasGroup.alpha = 1;
+            canvasGroup.blocksRaycasts = true;
+        }
+
+
+    }
+
+    public void AbandonQuest()
+    {
+
+    }
+
+    public void Close()
+    {
+        canvasGroup.alpha = 0;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public bool HasQuest(Quest quest)
+    {
+        return quests.Exists(x => x.MyTitle == quest.MyTitle);
     }
 }

@@ -65,7 +65,7 @@ public class ActionButtons : MonoBehaviour,  IPointerClickHandler, IClickable,ID
     {
         MyButton = GetComponent<Button>();
         MyButton.onClick.AddListener(OnClick);
-        InventoryScripts.MyInstance.itemCountChanged += new ItemCountChanged(UpdateItemCount);
+        InventoryScripts.MyInstance.itemCountChangedEvent += new ItemCountChanged(UpdateItemCount);
     }
 
     // Update is called once per frame

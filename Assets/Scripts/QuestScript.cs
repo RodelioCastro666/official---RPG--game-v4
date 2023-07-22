@@ -10,16 +10,7 @@ public class QuestScript : MonoBehaviour
 
     private bool markedComplete = false;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 
     public void Select()
     {
@@ -37,6 +28,7 @@ public class QuestScript : MonoBehaviour
         {
             markedComplete = true;
             GetComponent<Text>().text += "(Complete)";
+            MessageFeedManager.MyInstace.WriteMessage(string.Format("{0} (Complete)", MyQuest.MyTitle));    
 
         }
         else if(!MyQuest.IsComplete)

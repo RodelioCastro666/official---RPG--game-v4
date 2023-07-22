@@ -17,7 +17,7 @@ public class Window : MonoBehaviour
 
     }
 
-    public void Close()
+    public virtual void Close()
     {
 
         npc.IsInteracting = false;

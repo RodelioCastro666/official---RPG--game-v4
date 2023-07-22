@@ -7,7 +7,7 @@ public delegate void ItemCountChanged(Item item);
 
 public class InventoryScripts : MonoBehaviour
 {
-    public event ItemCountChanged itemCountChanged;
+    public event ItemCountChanged itemCountChangedEvent;
 
     public static InventoryScripts instance;
 
@@ -279,6 +279,33 @@ public class InventoryScripts : MonoBehaviour
         return itemCount;
     }
 
+    public Stack<Item> GetItems(string type, int count)
+    {
+        Stack<Item> items = new Stack<Item>();
+
+        foreach(Bag bag in bags)
+        {
+                
+            foreach (SlotScript slot in bag.MyBagScript.MySlots)
+            {
+                if (!slot.IsEmpty && slot.MyItem.MyTitle == type)
+                {
+                    foreach(Item item in slot.MyItems)
+                    {
+                        items.Push(item);
+
+                        if (items.Count == count)
+                        {
+                            return items;
+                        }
+                    }
+                }
+            }
+        }
+
+        return items;
+    }
+
     public Stack<IUsable> GetUsables(IUsable type) 
     {
         Stack<IUsable> useables = new Stack<IUsable>();
@@ -302,9 +329,9 @@ public class InventoryScripts : MonoBehaviour
 
     public void OnItemCountChanged(Item item)
     {
-        if (itemCountChanged != null)
+        if (itemCountChangedEvent != null)
         {
-            itemCountChanged.Invoke(item);
+            itemCountChangedEvent.Invoke(item);
         }
     }
 }
