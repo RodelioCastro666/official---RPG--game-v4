@@ -92,10 +92,13 @@ public class Character : MonoBehaviour
             myRigidbody.velocity = Direction.normalized * Speed;
         }
 
-       
-        
-
       
+    }
+
+    public void GetHealth(int health)
+    {
+        MyHealth.MyCurrentValue += health;
+        CombatTextManager.MyInstance.CreateText(transform.position, health.ToString());
     }
 
     public void HandleLayers()

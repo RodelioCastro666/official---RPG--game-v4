@@ -71,9 +71,13 @@ public class VendorWindow : Window
 
     public void PreviousPage()
     {
-        ClearButtons();
-        pageIndex--;
-        AddItems();
+        if (pageIndex > 0)
+        {
+            ClearButtons();
+            pageIndex--;
+            AddItems();
+        }
+        
     }
 
     public void ClearButtons()

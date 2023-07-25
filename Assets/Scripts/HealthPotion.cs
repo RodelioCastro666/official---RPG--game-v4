@@ -15,7 +15,7 @@ public class HealthPotion :Item, IUsable
         {
             Remove();
 
-            Player.MyInstance.MyHealth.MyCurrentValue += health;
+            Player.MyInstance.GetHealth(health);
         }
 
         

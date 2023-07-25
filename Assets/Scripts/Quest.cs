@@ -131,10 +131,15 @@ public class KillObjective : Objective
     {
         if (MyType == character.MyType)
         {
-            MyCurrenAmount++;
-            MessageFeedManager.MyInstace.WriteMessage(string.Format("{0}: {1}/{2}", MyType, MyCurrenAmount, MyAmount));
-            QuestLog.MyInstance.UpdateSelected();
-            QuestLog.MyInstance.CheckCompletion();
+            if (MyCurrenAmount < MyAmount)
+            {
+                MyCurrenAmount++;
+                MessageFeedManager.MyInstace.WriteMessage(string.Format("{0}: {1}/{2}", MyType, MyCurrenAmount, MyAmount));
+                QuestLog.MyInstance.UpdateSelected();
+                QuestLog.MyInstance.CheckCompletion();
+            }
+
+          
         }
     }
 }
