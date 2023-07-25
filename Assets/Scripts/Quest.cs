@@ -18,9 +18,9 @@ public class Quest
     [SerializeField]
     private KillObjective[] killObjectives;
 
-
-
     public QuestScript MyQuestScript { get; set; }
+
+    public QuestGiver MyQuestGiver { get; set; }
 
     public string MyTitle { get => title; set => title = value; }
 
@@ -81,7 +81,7 @@ public abstract class Objective
         get
         {
             return MyCurrenAmount >= MyAmount;
-            Debug.Log("3");
+            
 
         }
     }
@@ -107,7 +107,7 @@ public class CollectObjective : Objective
         }
     }
     public void UpdateItemCount()
-    {
+    { 
         MyCurrenAmount = InventoryScripts.MyInstance.GetItemCount(MyType);
         QuestLog.MyInstance.UpdateSelected();
         QuestLog.MyInstance.CheckCompletion();

@@ -50,7 +50,7 @@ public class QuestGiverWindow : Window
         questArea.gameObject.SetActive(true);
         questDescription.SetActive(false);
 
-        foreach (Quest quest in questGiver.MyQuest)
+        foreach (Quest quest in questGiver.MyQuests)
         {
             if (quest != null)
             {
@@ -142,23 +142,25 @@ public class QuestGiverWindow : Window
     {
         if (selectedQuest.IsComplete)
         {
-            for (int i = 0; i < questGiver.MyQuest.Length; i++)
+            for (int i = 0; i < questGiver.MyQuests.Length; i++)
             {
-                if (selectedQuest == questGiver.MyQuest[i])
+                if (selectedQuest == questGiver.MyQuests[i])
                 {
-                    questGiver.MyQuest[i] = null;
+                    questGiver.MyQuests[i] = null;
                 }
             }
 
             foreach (CollectObjective o in selectedQuest.MyCollectObjectives)
             {
                 InventoryScripts.MyInstance.itemCountChangedEvent -= new ItemCountChanged(o.UpdateItemCount);
-                o.Complete();
+                o.Complete(); 
             }
             foreach (KillObjective o in selectedQuest.MyKillObjectives)
             {
                 GameManager.MyInstance.killConfirmedEvent -= new KillConfirmed(o.UpdateKilleCount);
             }
+
+            QuestLog.MyInstance.RemoveQuest(selectedQuest.MyQuestScript);
 
             Back();
         }
