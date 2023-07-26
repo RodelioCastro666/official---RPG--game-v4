@@ -25,7 +25,7 @@ public class Player : Character
     private Stat mana;
 
     [SerializeField]
-    private Stat xp;
+    private Stat xpStat;
 
     [SerializeField]
     private Text levelText;
@@ -55,7 +55,7 @@ public class Player : Character
     {
         MyGold = 1000;
         mana.Initialize(initMana, initMana);
-        xp.Initialize(0, Mathf.Floor( 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
+        xpStat.Initialize(0, Mathf.Floor( 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
         levelText.text = MyLevel.ToString();
         base.Start();  
     }
@@ -79,9 +79,12 @@ public class Player : Character
     public void GetInput()
     {
         Direction = Vector2.zero;
-        
 
-        
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            GainXP(30);
+        }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -136,6 +139,31 @@ public class Player : Character
         }
         
             
+    }
+
+    private IEnumerator  Ding()
+    {
+        while (!xpStat.IsFUll)
+        {
+            yield return null;
+        }
+
+        MyLevel++;
+        levelText.text = MyLevel.ToString();
+        xpStat.MyMaxValue = 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f);
+        xpStat.MyMaxValue = Mathf.Floor(xpStat.MyMaxValue);
+        xpStat.Reset();
+    }
+
+    public void GainXP(int xp)
+    {
+        xpStat.MyCurrentValue += xp;
+        CombatTextManager.MyInstance.CreateText(transform.position, xp.ToString(), SCTTYPE.XP, false);
+
+        if (xpStat.MyCurrentValue >= xpStat.MyMaxValue)
+        {
+            StartCoroutine(Ding());
+        }
     }
 
     private IEnumerator Attack(string spellName)

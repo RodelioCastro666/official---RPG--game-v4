@@ -167,6 +167,11 @@ public class Character : MonoBehaviour
             myRigidbody.velocity = Direction;
             GameManager.MyInstance.OnKillConfirmed(this);
             MyAnimator.SetTrigger("die");
+
+            if(this is Enemy)
+            {
+                Player.MyInstance.GainXP(Xpmanager.CalculateXP((this as Enemy)));
+            }
         }
     }
 }
