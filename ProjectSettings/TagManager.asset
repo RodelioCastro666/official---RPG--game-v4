@@ -52,6 +52,9 @@ TagManager:
   - name: Obstacle
     uniqueID: 1472598493
     locked: 0
+  - name: SCT
+    uniqueID: 4181170823
+    locked: 0
   - name: UI
     uniqueID: 4117479161
     locked: 0

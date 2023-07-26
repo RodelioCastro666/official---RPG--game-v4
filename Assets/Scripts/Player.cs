@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Character
 {
@@ -23,7 +24,11 @@ public class Player : Character
     [SerializeField]
     private Stat mana;
 
-  
+    [SerializeField]
+    private Stat xp;
+
+    [SerializeField]
+    private Text levelText;
 
     [SerializeField]
     private Transform[] exitPoints;
@@ -48,17 +53,11 @@ public class Player : Character
 
     protected override void Start()
     {
-
-
         MyGold = 1000;
-
         mana.Initialize(initMana, initMana);
-
-       
-
-        base.Start();
-
-        
+        xp.Initialize(0, Mathf.Floor( 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
+        levelText.text = MyLevel.ToString();
+        base.Start();  
     }
 
     protected override void Update()

@@ -15,6 +15,9 @@ public class Character : MonoBehaviour
 
     private Vector2 direction;
 
+    [SerializeField]
+    private int level;
+
     private Rigidbody2D myRigidbody;
 
     public Transform MyTarget { get; set; }
@@ -63,6 +66,8 @@ public class Character : MonoBehaviour
 
     public string MyType { get => type;  }
 
+    public int MyLevel { get => level; set => level = value; }
+
     protected virtual void Start()
     {
         health.Initialize(initHealth, initHealth);
@@ -98,7 +103,7 @@ public class Character : MonoBehaviour
     public void GetHealth(int health)
     {
         MyHealth.MyCurrentValue += health;
-        CombatTextManager.MyInstance.CreateText(transform.position, health.ToString());
+        CombatTextManager.MyInstance.CreateText(transform.position, health.ToString(), SCTTYPE.HEAL, true);
     }
 
     public void HandleLayers()
@@ -154,9 +159,10 @@ public class Character : MonoBehaviour
         
 
         health.MyCurrentValue -= damage;
-
+        CombatTextManager.MyInstance.CreateText(transform.position, damage.ToString(), SCTTYPE.DAMAGE, false); 
         if (health.MyCurrentValue <= 0)
         {
+
             myRigidbody.velocity = Direction;
             myRigidbody.velocity = Direction;
             GameManager.MyInstance.OnKillConfirmed(this);
