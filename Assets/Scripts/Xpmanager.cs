@@ -97,4 +97,34 @@ class Xpmanager
 
         return Player.MyInstance.MyLevel - 9;
     }
+
+    public static int CalculateXP(Quest e)
+    {
+        if(Player.MyInstance.MyLevel <= e.MyLevel + 5)
+        {
+            return e.MyXp;
+        }
+        if(Player.MyInstance.MyLevel == e.MyLevel +6)
+        {
+            return (int)(e.MyXp * 0.8 / 5) * 5;
+        }
+        if (Player.MyInstance.MyLevel == e.MyLevel + 6)
+        {
+            return (int)(e.MyXp * 0.6 / 5) * 5;
+        }
+        if (Player.MyInstance.MyLevel == e.MyLevel + 7)
+        {
+            return (int)(e.MyXp * 0.4 / 5) * 5;
+        }
+        if (Player.MyInstance.MyLevel == e.MyLevel + 8)
+        {
+            return (int)(e.MyXp * 0.2 / 5) * 5;
+        }
+        if (Player.MyInstance.MyLevel == e.MyLevel + 9)
+        {
+            return (int)(e.MyXp * 0.1 / 5) * 5;
+        }
+
+        return 0;
+    }
 }

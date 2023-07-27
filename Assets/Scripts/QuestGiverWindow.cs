@@ -55,7 +55,8 @@ public class QuestGiverWindow : Window
             if (quest != null)
             {
                 GameObject go = Instantiate(questPrefab, questArea);
-                go.GetComponent<Text>().text = quest.MyTitle;
+
+                go.GetComponent<Text>().text = "["+ quest.MyLevel +"] " +quest.MyTitle;
 
                 go.GetComponent<QGQuestScripts>().MyQuest = quest;
 
@@ -159,6 +160,7 @@ public class QuestGiverWindow : Window
             {
                 GameManager.MyInstance.killConfirmedEvent -= new KillConfirmed(o.UpdateKilleCount);
             }
+            Player.MyInstance.GainXP(Xpmanager.CalculateXP(selectedQuest));
 
             QuestLog.MyInstance.RemoveQuest(selectedQuest.MyQuestScript);
 

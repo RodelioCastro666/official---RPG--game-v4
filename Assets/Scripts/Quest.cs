@@ -18,6 +18,12 @@ public class Quest
     [SerializeField]
     private KillObjective[] killObjectives;
 
+    [SerializeField]
+    private int xp;
+
+    [SerializeField]
+    private int level;
+
     public QuestScript MyQuestScript { get; set; }
 
     public QuestGiver MyQuestGiver { get; set; }
@@ -55,6 +61,10 @@ public class Quest
     }
 
     public KillObjective[] MyKillObjectives { get => killObjectives;  }
+
+    public int MyXp { get => xp; set => xp = value; }
+
+    public int MyLevel { get => level; set => level = value; }
 }
 
 [System.Serializable]

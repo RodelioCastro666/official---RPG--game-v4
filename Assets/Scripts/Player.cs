@@ -36,7 +36,8 @@ public class Player : Character
     [SerializeField]
     private Blocks[] blocks;
 
-    
+    [SerializeField]
+    private Animator ding;
 
     private int exitIndex = 2;
 
@@ -149,17 +150,24 @@ public class Player : Character
         }
 
         MyLevel++;
+        ding.SetTrigger("Ding");
         levelText.text = MyLevel.ToString();
         xpStat.MyMaxValue = 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f);
         xpStat.MyMaxValue = Mathf.Floor(xpStat.MyMaxValue);
+        xpStat.MyCurrentValue = xpStat.MyOverFlow;
         xpStat.Reset();
+
+        if (xpStat.MyCurrentValue >= xpStat.MyMaxValue)
+        {
+            StartCoroutine(Ding());
+        }
     }
 
     public void GainXP(int xp)
     {
         xpStat.MyCurrentValue += xp;
         CombatTextManager.MyInstance.CreateText(transform.position, xp.ToString(), SCTTYPE.XP, false);
-
+         
         if (xpStat.MyCurrentValue >= xpStat.MyMaxValue)
         {
             StartCoroutine(Ding());
