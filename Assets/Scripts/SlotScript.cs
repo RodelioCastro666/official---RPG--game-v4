@@ -14,7 +14,7 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
     [SerializeField]
     private Text StackSize;
 
-    
+    public int MyIndex { get; set; }
 
     public BagScript MyBag { get; set; }
 
@@ -149,6 +149,22 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
             {
                 if (HandScript.MyInstance.MyMoveable != null )
                 {
+                    if (HandScript.MyInstance.MyMoveable != null && HandScript.MyInstance.MyMoveable is Bag)
+                    {
+                        if (MyItem is Bag)
+                        {
+                            InventoryScripts.MyInstance.Swapbags(HandScript.MyInstance.MyMoveable as Bag, MyItem as Bag);
+                        }
+                        else
+                        {
+                            HandScript.MyInstance.TakeMoveable(MyItem as IMovable);
+                            InventoryScripts.MyInstance.FromSlot = this;
+                        }
+
+                       
+                    }
+
+
                     if (HandScript.MyInstance.MyMoveable is Armor)
                     {
                         if (MyItem is Armor &&  (MyItem as Armor).MyArmorType == (HandScript.MyInstance.MyMoveable as Armor).MyArmorType)
@@ -162,8 +178,8 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
 
 
                 HandScript.MyInstance.TakeMoveable(MyItem as IMovable);
-                    InventoryScripts.MyInstance.FromSlot = this;
-                    Debug.Log("drag");
+                InventoryScripts.MyInstance.FromSlot = this;
+                Debug.Log("drag");
                 
             }
 
@@ -176,6 +192,8 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
                     if (bag.MyBagScript != MyBag)
                     {
                         AddItem(bag);
+                        bag.MyBagButton.RemoveBag();
+                        HandScript.MyInstance.Drop();
                     }
                 }
                 if (HandScript.MyInstance.MyMoveable is Armor)
@@ -205,7 +223,7 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
             UiManager.MyInstance.HideToolTip();
         
 
-       
+        
 
         if (eventData.button == PointerEventData.InputButton.Left && HandScript.MyInstance.MyMoveable != null)
         {
@@ -214,6 +232,17 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
 
                 if (HandScript.MyInstance.MyMoveable != null)
                 {
+                    if (MyItem is Bag && HandScript.MyInstance.MyMoveable is Bag)
+                    {
+                        InventoryScripts.MyInstance.Swapbags(HandScript.MyInstance.MyMoveable as Bag, MyItem as Bag);
+                    }
+                    else
+                    {
+                        HandScript.MyInstance.TakeMoveable(MyItem as IMovable);
+                        InventoryScripts.MyInstance.FromSlot = this;
+                    }
+                    
+
                     if (HandScript.MyInstance.MyMoveable is Armor)
                     {
                         if (MyItem is Armor && (MyItem as Armor).MyArmorType == (HandScript.MyInstance.MyMoveable as Armor).MyArmorType)
@@ -225,8 +254,7 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
                     }
                 }
 
-                HandScript.MyInstance.TakeMoveable(MyItem as IMovable);
-                 InventoryScripts.MyInstance.FromSlot = this;
+              
                  
 
                 
@@ -238,13 +266,13 @@ public class SlotScript : MonoBehaviour, IPointerClickHandler, IClickable, IDrag
                 {
                     Bag bag = (Bag)HandScript.MyInstance.MyMoveable;
 
-                    if (bag.MyBagScript != MyBag && MyBag && InventoryScripts.MyInstance.MyEmptySlotCount - bag.Slots > 0)
+                    if (bag.MyBagScript != MyBag && MyBag && InventoryScripts.MyInstance.MyEmptySlotCount - bag.MySlotCount > 0)
                     {
                         AddItem(bag);
                         bag.MyBagButton.RemoveBag();
                         HandScript.MyInstance.Drop();
                        
-                        Debug.Log("else drop");
+                       
                     }
                 }
                 if (HandScript.MyInstance.MyMoveable is Armor)

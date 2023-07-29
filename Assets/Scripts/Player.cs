@@ -52,11 +52,18 @@ public class Player : Character
 
     public IInteractable MyInteractable { get => interactable; set => interactable = value; }
 
+    public Stat MyXp
+    {
+       get => xpStat; set => xpStat = value; 
+    }
+
+    public Stat MyMana { get => mana; set => mana = value; }
+
     protected override void Start()
     {
         MyGold = 1000;
-        mana.Initialize(initMana, initMana);
-        xpStat.Initialize(0, Mathf.Floor( 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
+        MyMana.Initialize(initMana, initMana);
+        MyXp.Initialize(0, Mathf.Floor( 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
         levelText.text = MyLevel.ToString();
         base.Start();  
     }
@@ -90,12 +97,12 @@ public class Player : Character
         if (Input.GetKeyDown(KeyCode.I))
         {
             health.MyCurrentValue -= 10;
-            mana.MyCurrentValue -= 10;
+            MyMana.MyCurrentValue -= 10;
         }
         if (Input.GetKeyDown(KeyCode.O))
         {
             health.MyCurrentValue += 10;
-            mana.MyCurrentValue += 10;
+            MyMana.MyCurrentValue += 10;
         }
 
         if (Input.GetKey(KeybindManager.MyInstance.Keybinds["UPB"]))
@@ -144,7 +151,7 @@ public class Player : Character
 
     private IEnumerator  Ding()
     {
-        while (!xpStat.IsFUll)
+        while (!MyXp.IsFUll)
         {
             yield return null;
         }
@@ -152,23 +159,28 @@ public class Player : Character
         MyLevel++;
         ding.SetTrigger("Ding");
         levelText.text = MyLevel.ToString();
-        xpStat.MyMaxValue = 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f);
-        xpStat.MyMaxValue = Mathf.Floor(xpStat.MyMaxValue);
-        xpStat.MyCurrentValue = xpStat.MyOverFlow;
-        xpStat.Reset();
+        MyXp.MyMaxValue = 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f);
+        MyXp.MyMaxValue = Mathf.Floor(MyXp.MyMaxValue);
+        MyXp.MyCurrentValue = MyXp.MyOverFlow;
+        MyXp.Reset();
 
-        if (xpStat.MyCurrentValue >= xpStat.MyMaxValue)
+        if (MyXp.MyCurrentValue >= MyXp.MyMaxValue)
         {
             StartCoroutine(Ding());
         }
     }
 
+    public void UpdateLevel()
+    {
+        levelText.text = MyLevel.ToString();
+    }
+
     public void GainXP(int xp)
     {
-        xpStat.MyCurrentValue += xp;
+        MyXp.MyCurrentValue += xp;
         CombatTextManager.MyInstance.CreateText(transform.position, xp.ToString(), SCTTYPE.XP, false);
          
-        if (xpStat.MyCurrentValue >= xpStat.MyMaxValue)
+        if (MyXp.MyCurrentValue >= MyXp.MyMaxValue)
         {
             StartCoroutine(Ding());
         }

@@ -119,16 +119,23 @@ public class ActionButtons : MonoBehaviour,  IPointerClickHandler, IClickable,ID
         }
 
         count = MyUseables.Count;
-        UpodateVisual();
+        UpodateVisual(useable as IMovable);
        
     }
 
-    public void UpodateVisual()
+    public void UpodateVisual(IMovable moveable)
     {
-        MyIcon.sprite = HandScript.MyInstance.Put().MyIcon;
+        
+
+        if(HandScript.MyInstance.MyMoveable != null)
+        {
+            HandScript.MyInstance.Drop();
+        }
+
+        MyIcon.sprite = moveable.MyIcon;
         MyIcon.color = Color.white;
 
-        if(count > 1)
+        if (count > 1)
         {
             UiManager.MyInstance.UpdateStackSize(this);
         }

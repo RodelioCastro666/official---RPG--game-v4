@@ -16,7 +16,9 @@ public class Bag : Item, IUsable
 
     public BagButton MyBagButton { get; set; }
 
-    public int Slots { get => slots;  }
+   // public int MySlotCount { get => Slots;  }
+
+    public int MySlotCount { get => slots;  } // change from "Slot"
 
     public void Initialized(int slots)
     {
@@ -29,26 +31,34 @@ public class Bag : Item, IUsable
         {
             Remove();
             MyBagScript = Instantiate(bagPrefab, InventoryScripts.MyInstance.transform).GetComponent<BagScript>();
-            MyBagScript.AddSlots(slots);
+            MyBagScript.AddSlots(MySlotCount);
 
-            InventoryScripts.MyInstance.AddBag(this);
+          //  InventoryScripts.MyInstance.AddBag(this);
 
-            //if (MyBagButton == null)
-            //{
-            //    InventoryScripts.MyInstance.AddBag(this);
-            //}
-            //else
-            //{
-            //    InventoryScripts.MyInstance.AddBag(this, MyBagButton);
-            //}
+            if (MyBagButton == null)
+            {
+                InventoryScripts.MyInstance.AddBag(this);
+            }
+            else
+            {
+                InventoryScripts.MyInstance.AddBag(this, MyBagButton);
+            }
+
+             //MyBagScript.MyBagIndex = MyBagButton.my;
         }
 
       
     }
 
+    public void SetUpScript()
+    {
+        MyBagScript = Instantiate(bagPrefab, InventoryScripts.MyInstance.transform).GetComponent<BagScript>();
+        MyBagScript.AddSlots(slots); // change from MySlotCount
+    }
+
     public override string GetDescription()
     {
-        return base.GetDescription() + string.Format("\n{0} slot bag", slots); 
+        return base.GetDescription() + string.Format("\n{0} slot bag", MySlotCount); 
     }
 
 

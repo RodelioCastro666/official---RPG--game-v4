@@ -14,20 +14,20 @@ public class CharButton : MonoBehaviour,  IDragHandler, IDropHandler,IEndDragHan
 
     private Armor equippedArmor;
 
-    
+    public Armor MyEquippedArmor { get => equippedArmor; }
 
     public void EquipArmor(Armor armor)
     {
         armor.Remove();
 
-        if (equippedArmor != null)
+        if (MyEquippedArmor != null)
         {
-            if (equippedArmor != armor)
+            if (MyEquippedArmor != armor)
             {
-                armor.MySlot.AddItem(equippedArmor);
+                armor.MySlot.AddItem(MyEquippedArmor);
             }
            
-            UiManager.MyInstance.RefreshToolTip(equippedArmor);
+            UiManager.MyInstance.RefreshToolTip(MyEquippedArmor);
         }
 
         
@@ -50,20 +50,20 @@ public class CharButton : MonoBehaviour,  IDragHandler, IDropHandler,IEndDragHan
     {
         icon.color = Color.white;
         icon.enabled = false;
-        equippedArmor = null;
+        equippedArmor  = null;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (equippedArmor != null)
+        if (MyEquippedArmor != null)
         {
-            UiManager.MyInstance.ShowToolTip(equippedArmor);
+            UiManager.MyInstance.ShowToolTip(MyEquippedArmor);
         }
 
 
-        if (HandScript.MyInstance.MyMoveable == null && equippedArmor != null)
+        if (HandScript.MyInstance.MyMoveable == null && MyEquippedArmor != null)
         {
-                HandScript.MyInstance.TakeMoveable(equippedArmor);
+                HandScript.MyInstance.TakeMoveable(MyEquippedArmor);
                 CharacterPanel.MyInstance.MySelectedButton = this;
                 icon.color = Color.grey;
                 Debug.Log(" char drag ");
