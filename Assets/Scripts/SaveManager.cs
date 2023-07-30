@@ -51,6 +51,8 @@ public class SaveManager : MonoBehaviour
 
             SaveBags(data);
 
+            SaveInventory(data);
+
             SavePlayer(data);
 
             SaveChest(data);
@@ -139,7 +141,7 @@ public class SaveManager : MonoBehaviour
 
         foreach(SlotScript slot in slots)
         {
-            //data.MyInventoryData.MyItem.Add(new ItemData(slot.MyItem.MyTitle, slot))
+            data.MyInventoryData.MyItems.Add(new ItemData(slot.MyItem.MyTitle, slot.MyItems.Count, slot.MyIndex, slot.MyBag.MyBagIndex));
         }
     }
 
@@ -161,7 +163,7 @@ public class SaveManager : MonoBehaviour
 
             Loadbags(data);
 
-           
+            LoadInventory(data);
 
             LoadPlayer(data);
 
@@ -202,7 +204,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public void Loadbags(SaveData data)
+    private void Loadbags(SaveData data)
     {
         foreach(BagData bagData in data.MyInventoryData.MyBags )
         {
@@ -214,7 +216,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public void LoadEquipemnt(SaveData data)
+    private void LoadEquipemnt(SaveData data)
     {
         foreach(EquipmentData equipmentData in data.MyEquipmentData)
         {
@@ -224,7 +226,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public void LoadActionButton(SaveData data)
+    private void LoadActionButton(SaveData data)
     {
         foreach(ActionButtonData buttonData in data.MyActionButtonData)
         {
@@ -235,6 +237,19 @@ public class SaveManager : MonoBehaviour
             else
             {
                 actionButtons[buttonData.MyIndex].SetUseable(SpellBook.MyInstance.GetSpell(buttonData.MyAction));
+            }
+        }
+    }
+
+    private void LoadInventory(SaveData data)
+    {
+        foreach(ItemData itemData in data.MyInventoryData.MyItems)
+        {
+            Item item = Array.Find(items, x => x.MyTitle == itemData.MyTitle);
+
+            for(int i = 0; i < itemData.MyStackCount; i++)
+            {
+                InventoryScripts.MyInstance.PlaceInSpecific(item, itemData.MySlotIndex, itemData.MyBagIndex);
             }
         }
     }

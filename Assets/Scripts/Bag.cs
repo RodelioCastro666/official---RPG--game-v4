@@ -44,7 +44,7 @@ public class Bag : Item, IUsable
                 InventoryScripts.MyInstance.AddBag(this, MyBagButton);
             }
 
-             //MyBagScript.MyBagIndex = MyBagButton.my;
+             MyBagScript.MyBagIndex = MyBagButton.MyBagIndex;
         }
 
       

@@ -72,8 +72,11 @@ public class ItemData
 
     public int MySlotIndex { get; set; }
 
+    public int MyBagIndex { get; set; }
+
     public ItemData(string title, int stackCount = 0, int slotIndex = 0, int bagIndex = 0)
     {
+        MyBagIndex = bagIndex;
         MyTitle = title;
         MyStackCount = stackCount;
         MySlotIndex = slotIndex;

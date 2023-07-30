@@ -290,7 +290,10 @@ public class InventoryScripts : MonoBehaviour
 
     }
 
-   
+   public void PlaceInSpecific(Item item, int slotindex, int bagIndex)
+    {
+        bags[bagIndex].MyBagScript.MySlots[slotindex].AddItem(item);
+    }
 
     public int GetItemCount(string type)
     {
