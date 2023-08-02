@@ -48,18 +48,14 @@ public class QuestLog : MonoBehaviour
         
     }
 
+    public List<Quest> MyQuest { get => quests; set => quests = value; }
+
     private void Start()
     {
        
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            OpenClose();
-        }
-    }
+   
 
     public void AcceptQuest(Quest quest)
     {
@@ -77,7 +73,7 @@ public class QuestLog : MonoBehaviour
                 GameManager.MyInstance.killConfirmedEvent += new KillConfirmed(o.UpdateKilleCount);
             }
 
-            quests.Add(quest);
+            MyQuest.Add(quest);
             GameObject go = Instantiate(questPrefab, questParent);
 
             QuestScript qs = go.GetComponent<QuestScript>();
@@ -176,7 +172,7 @@ public class QuestLog : MonoBehaviour
     {
         questScripts.Remove(qs);
         Destroy(qs.gameObject);
-        quests.Remove(qs.MyQuest);
+        MyQuest.Remove(qs.MyQuest);
         questDescription.text = string.Empty;
         selected = null;
         currentCount--;
@@ -193,6 +189,6 @@ public class QuestLog : MonoBehaviour
 
     public bool HasQuest(Quest quest)
     {
-        return quests.Exists(x => x.MyTitle == quest.MyTitle);
+        return MyQuest.Exists(x => x.MyTitle == quest.MyTitle);
     }
 }

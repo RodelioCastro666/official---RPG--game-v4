@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
@@ -17,35 +18,71 @@ public class SaveManager : MonoBehaviour
     [SerializeField]
     private ActionButtons[] actionButtons;
 
+    [SerializeField]
+    private SavedGame[] saveSlots;
+
+    private string action;
+
     // Start is called before the first frame update
     void Awake()
     {
         chests = FindObjectsOfType<Chest>();
         equipment = FindObjectsOfType<CharButton>();
+
+        foreach(SavedGame saved in saveSlots)
+        {
+            ShowSavedFiles(saved);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShowDialogue(GameObject clickButton)
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        action = clickButton.name;
+
+        switch (action) 
         {
-            Save();
+            case "Load":
+                Load(clickButton.GetComponentInParent<SavedGame>());
+                break;
+            case "Save":
+                Save(clickButton.GetComponentInParent<SavedGame>());
+                break;
+            case "Delete":
+                Delete(clickButton.GetComponentInParent<SavedGame>());
+                break;
         }
-        if (Input.GetKeyDown(KeyCode.E))
+
+    }
+
+    private void Delete(SavedGame savedGame)
+    {
+        File.Delete(Application.persistentDataPath + "/" + savedGame.gameObject.name + ".dat");
+        savedGame.HideVisuals();
+    }
+
+    private void ShowSavedFiles(SavedGame savedGame)
+    {
+        if(File.Exists(Application.persistentDataPath + "/" + savedGame.gameObject.name + ".dat"))
         {
-            Load();
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/" + savedGame.gameObject.name + ".dat", FileMode.Open);
+            SaveData data = (SaveData)bf.Deserialize(file);
+            file.Close();
+            savedGame.ShowInfo(data);
         }
     }
 
-    private void Save()
+    public void Save(SavedGame savedGame)
     {
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
 
-            FileStream file = File.Open(Application.persistentDataPath + "/" + "SaveTest.dat", FileMode.Create);
+            FileStream file = File.Open(Application.persistentDataPath + "/" + savedGame.gameObject.name +  ".dat", FileMode.Create);
 
             SaveData data = new SaveData();
+
+            data.MyScene = SceneManager.GetActiveScene().name;
 
             SaveEquipment(data);
 
@@ -59,9 +96,15 @@ public class SaveManager : MonoBehaviour
 
             SaveActionButtons(data);
 
+            SaveQuest(data);
+
+            SaveQuestGivers(data);
+
             bf.Serialize(file, data);
 
             file.Close();
+
+            ShowSavedFiles(savedGame);
         }
         catch(System.Exception)
         {
@@ -135,6 +178,14 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    private void SaveQuest(SaveData data)
+    {
+        foreach(Quest quest in QuestLog.MyInstance.MyQuest)
+        {
+            data.MyQuestData.Add(new QuestData(quest.MyTitle, quest.MyDescription, quest.MyCollectObjectives, quest.MyKillObjectives, quest.MyQuestGiver.MyQuestGiverID));
+        }
+    }
+
     private void SaveInventory(SaveData data)
     {
         List<SlotScript> slots = InventoryScripts.MyInstance.GetAllItems();
@@ -145,13 +196,23 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    private void Load()
+    private void SaveQuestGivers(SaveData data)
+    {
+        QuestGiver[] questGivers = FindObjectsOfType<QuestGiver>();
+
+        foreach(QuestGiver questGiver in questGivers)
+        {
+            data.MyQuestGiverData.Add(new QuestGiverData(questGiver.MyQuestGiverID, questGiver.MyCompletedQuest));
+        }
+    }
+
+    private void Load(SavedGame savedGame)
     {
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
 
-            FileStream file = File.Open(Application.persistentDataPath + "/" + "SaveTest.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/" + savedGame.gameObject.name + ".dat", FileMode.Open);
 
             SaveData data = (SaveData)bf.Deserialize(file);
 
@@ -170,6 +231,10 @@ public class SaveManager : MonoBehaviour
             LoadChest(data);
 
             LoadActionButton(data);
+
+            LoadQuest(data);
+
+            LoadQuestGiver(data);
         }
         catch (System.Exception)
         {
@@ -251,6 +316,32 @@ public class SaveManager : MonoBehaviour
             {
                 InventoryScripts.MyInstance.PlaceInSpecific(item, itemData.MySlotIndex, itemData.MyBagIndex);
             }
+        }
+    }
+
+    private void LoadQuest(SaveData data)
+    {
+        QuestGiver[] questGivers = FindObjectsOfType<QuestGiver>();
+
+        foreach(QuestData questData in data.MyQuestData)
+        {
+            QuestGiver qg = Array.Find(questGivers, x => x.MyQuestGiverID == questData.MyQuestGiverID);
+            Quest q = Array.Find(qg.MyQuests, x => x.MyTitle == questData.Mytitle);
+            q.MyQuestGiver = qg;
+            q.MyKillObjectives = questData.MykillObejectives;
+            QuestLog.MyInstance.AcceptQuest(q);
+        }
+    }
+
+    private void LoadQuestGiver(SaveData data)
+    {
+        QuestGiver[] questGivers = FindObjectsOfType<QuestGiver>();
+
+        foreach(QuestGiverData questGiverData in data.MyQuestGiverData)
+        {
+            QuestGiver questGiver = Array.Find(questGivers, x => x.MyQuestGiverID == questGiverData.MyQuestGiverID);
+            questGiver.MyCompletedQuest = questGiverData.MyCompleteQuest;
+            questGiver.UpdateQuestStatus();
         }
     }
 }

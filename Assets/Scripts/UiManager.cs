@@ -45,6 +45,8 @@ public class UiManager : MonoBehaviour
     [SerializeField]
     private ActionButtons[] actionButtons;
 
+    [SerializeField]
+    private CanvasGroup[] menus;
    
 
     [SerializeField]
@@ -80,27 +82,51 @@ public class UiManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)) 
         {
-            OpenClose(keybindsMenu);
+            OpenClose(menus[0]);
         }
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            OpenClose(spellBook);
+            OpenClose(menus[1]);
         }
-        if(Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             InventoryScripts.MyInstance.OpenClose();
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            charPanel.OpenClose();
+            OpenClose(menus[2]);
         }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            OpenClose(menus[3]);
+        }
+        
+
+
+
+
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    OpenClose(keybindsMenu);
+        //}
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    OpenClose(spellBook);
+        //}
+        //if(Input.GetKeyDown(KeyCode.B))
+        //{
+        //    InventoryScripts.MyInstance.OpenClose();
+        //}
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    charPanel.OpenClose();
+        //}
 
     }
 
-   
+
 
     public void ShowTargetFrame(Enemy target)
     {
@@ -167,6 +193,23 @@ public class UiManager : MonoBehaviour
     {
         canvasGroup.alpha = canvasGroup.alpha > 0 ? 0 : 1;
         canvasGroup.blocksRaycasts = canvasGroup.blocksRaycasts == true ? false : true;
+    }
+
+    public void OpenSingle(CanvasGroup canvasGroup)
+    {
+        foreach(CanvasGroup canvas in menus)
+        {
+            CloseSingle(canvas);
+        }
+
+        canvasGroup.alpha = canvasGroup.alpha > 0 ? 0 : 1;
+        canvasGroup.blocksRaycasts = canvasGroup.blocksRaycasts == true ? false : true;
+    }
+
+    public void CloseSingle(CanvasGroup canvasGroup)
+    {
+        canvasGroup.alpha = 0;
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void UpdateStackSize(IClickable clickable)

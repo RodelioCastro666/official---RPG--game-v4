@@ -17,12 +17,23 @@ public class SaveData
 
     public List<ActionButtonData> MyActionButtonData { get; set; }
 
+    public List<QuestData> MyQuestData { get; set; }
+
+    public List<QuestGiverData> MyQuestGiverData { get; set; }
+
+    public DateTime MyDateTime { get; set; }
+
+    public string MyScene { get; set; }
+
     public SaveData()
     {
         MyInventoryData = new InventoryData();
         MyChestData = new List<ChestData>();
         MyActionButtonData = new List<ActionButtonData>();
         MyEquipmentData = new List<EquipmentData>();
+        MyQuestData = new List<QuestData>();
+        MyQuestGiverData = new List<QuestGiverData>();
+        MyDateTime = DateTime.Now;
     }
 }
 
@@ -157,6 +168,47 @@ public class ActionButtonData
         this.MyIndex = index;
     }
 }
+
+[Serializable]
+public class QuestData
+{ 
+    public string Mytitle { get; set; }
+
+    public string MyDescription { get; set; }
+
+    public CollectObjective[] MyCollectObjectives { get; set; }
+
+    public KillObjective[] MykillObejectives { get; set; }
+
+    public int MyQuestGiverID { get; set; }
+
+    public QuestData(string title, string description, CollectObjective[] collectObjectives, KillObjective[] killObjectives, int questGiverId)
+    {
+        Mytitle = title;
+        MyDescription = description;
+        MyCollectObjectives = collectObjectives;
+        MykillObejectives = killObjectives;
+        MyQuestGiverID = questGiverId;
+
+    }
+
+}
+
+[Serializable]
+public class QuestGiverData
+{ 
+    public List<string> MyCompleteQuest { get; set; }
+
+    public int MyQuestGiverID { get; set; }
+
+    public QuestGiverData(int questGiverID, List<string> completeQuest)
+    {
+        this.MyQuestGiverID = questGiverID;
+        this.MyCompleteQuest = completeQuest;
+    }
+}
+
+
 
 
 
