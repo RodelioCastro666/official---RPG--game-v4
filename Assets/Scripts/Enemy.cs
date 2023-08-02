@@ -96,6 +96,10 @@ public class Enemy : Character, IInteractable
 
     protected void Awake()
     {
+        SpriteRenderer sr;
+        sr = GetComponent<SpriteRenderer>();
+        sr.enabled = true;
+        health.Initialize(initHealth, initHealth);
         MyStartPosition = transform.position;
         MyAggroRange = initAggroRange;
         MyAttackRange = 0.5f;

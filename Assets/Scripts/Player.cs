@@ -59,14 +59,7 @@ public class Player : Character
 
     public Stat MyMana { get => mana; set => mana = value; }
 
-    protected override void Start()
-    {
-        MyGold = 1000;
-        MyMana.Initialize(initMana, initMana);
-        MyXp.Initialize(0, Mathf.Floor( 100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
-        levelText.text = MyLevel.ToString();
-        base.Start();  
-    }
+    
 
     protected override void Update()
     {
@@ -76,6 +69,15 @@ public class Player : Character
 
         base.Update();
 
+    }
+
+    public void SetDefaultValues()
+    {
+        MyGold = 10000;
+        health.Initialize(initHealth, initHealth);
+        MyMana.Initialize(initMana, initMana);
+        MyXp.Initialize(0, Mathf.Floor(100 * MyLevel * Mathf.Pow(MyLevel, 0.5f)));
+        levelText.text = MyLevel.ToString();
     }
 
     public void SetLimits(Vector3 min , Vector3 max)

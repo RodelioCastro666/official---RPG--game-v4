@@ -25,7 +25,7 @@ public class Character : MonoBehaviour
     public Animator MyAnimator { get; set; }
 
     [SerializeField]
-    private float initHealth;
+    protected float initHealth;
 
    
 
@@ -70,7 +70,7 @@ public class Character : MonoBehaviour
 
     protected virtual void Start()
     {
-        health.Initialize(initHealth, initHealth);
+       
 
         myRigidbody = GetComponent<Rigidbody2D>();
 
