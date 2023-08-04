@@ -324,7 +324,7 @@ public class SaveManager : MonoBehaviour
     {
         foreach (ChestData chest in data.MyChestData)
         {
-            Chest c = Array.Find(chests, x => x.name == chest.MyName);
+            Chest c = Instantiate(Array.Find(chests, x => x.name == chest.MyName));
 
             foreach(ItemData itemData in chest.MyItems)
             {
@@ -376,7 +376,7 @@ public class SaveManager : MonoBehaviour
     {
         foreach(ItemData itemData in data.MyInventoryData.MyItems)
         {
-            Item item = Array.Find(items, x => x.MyTitle == itemData.MyTitle);
+            Item item = Instantiate(Array.Find(items, x => x.MyTitle == itemData.MyTitle));
 
             for(int i = 0; i < itemData.MyStackCount; i++)
             {

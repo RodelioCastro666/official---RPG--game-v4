@@ -48,4 +48,26 @@ public class Obstacle : MonoBehaviour , IComparable<Obstacle>
     {
         MySpriteRenderer.color = defaultColor;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name == "Ob")
+        {
+            FadeOut();
+            Debug.Log("ffff");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.name == "Ob")
+        {
+            FadeIn();
+            Debug.Log("hhhh");
+        }
+    }
 }
+ 
+
+
+

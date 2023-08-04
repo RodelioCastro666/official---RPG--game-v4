@@ -10,17 +10,19 @@ public class LootTable : MonoBehaviour
 
     private bool rolled = false;
 
-    private List<Item> droppedItems = new List<Item>();
+    public List<Drop> MyDroppedItems { get; set; }
 
-    public void ShowLoot()
+    public List<Drop> GetLoot()
     {
         if (!rolled)
         {
+            MyDroppedItems = new List<Drop>();
             RollLoot();
         }
+        return MyDroppedItems;
 
       
-        LootWindow.MyInstance.CreatePages(droppedItems);
+       
     }
 
     private  void RollLoot()
@@ -31,7 +33,7 @@ public class LootTable : MonoBehaviour
 
             if (roll <= item.MyDropChance)
             {
-                droppedItems.Add(item.MyItem);
+                MyDroppedItems.Add(new Drop(item.MyItem, this));
             }
         }
 

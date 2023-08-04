@@ -43,14 +43,15 @@ public class Player : Character
 
     private Vector3 max, min;
     
+    private List<Enemy> attackers = new List<Enemy>();
 
     private float initMana = 50;
 
-    private IInteractable interactable;
+    private List<IInteractable> interactables = new List<IInteractable>();
 
    public int MyGold { get; set; }
 
-    public IInteractable MyInteractable { get => interactable; set => interactable = value; }
+    public List<IInteractable> MyInteractables { get => interactables; set => interactables = value; }
 
     public Stat MyXp
     {
@@ -59,7 +60,7 @@ public class Player : Character
 
     public Stat MyMana { get => mana; set => mana = value; }
 
-    
+    public List<Enemy> MyAttackers { get => attackers; set => attackers = value; }
 
     protected override void Update()
     {
@@ -149,6 +150,14 @@ public class Player : Character
         }
         
             
+    }
+
+    public void AddAttackers(Enemy enemy)
+    {
+        if (!MyAttackers.Contains(enemy))
+        {
+            MyAttackers.Add(enemy);
+        }
     }
 
     private IEnumerator  Ding()
@@ -270,19 +279,20 @@ public class Player : Character
 
     }
 
-    public void Interact()
-    {
-        if (MyInteractable != null)
-        {
-            MyInteractable.Interact();
-        }
-    }
+    
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Enemy" || collision.tag == "Interactable")
         {
-            MyInteractable = collision.GetComponent<IInteractable>();
+            IInteractable interactable = collision.GetComponent<IInteractable>();
+
+            if (!MyInteractables.Contains(interactable))
+            {
+                MyInteractables.Add(interactable);
+            }
+
+           
         }
     }
 
@@ -290,11 +300,19 @@ public class Player : Character
     {
         if (collision.tag == "Enemy" || collision.tag == "Interactable")
         {
-            if (MyInteractable != null)
+            if(MyInteractables.Count > 0)
             {
-                MyInteractable.StopInteract();
-                MyInteractable = null;
+                IInteractable interactable = MyInteractables.Find(x => x == collision.GetComponent<IInteractable>());
+
+                if(interactable != null)
+                {
+                    interactable.StopInteract();
+                }
+
+                MyInteractables.Remove(interactable);
             }
+
+           
         }
     }
 

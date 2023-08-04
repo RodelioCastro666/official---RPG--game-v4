@@ -27,9 +27,9 @@ public class LootWindow : MonoBehaviour
 
     private CanvasGroup canvasGroup;
 
-    private List<Item> droppedLoot = new List<Item>();
+    private List<Drop> droppedLoot = new List<Drop>();
 
-    private List<List<Item>> pages = new List<List<Item>>();
+    private List<List<Drop>> pages = new List<List<Drop>>();
 
     private int pageIndex = 0;
 
@@ -68,13 +68,13 @@ public class LootWindow : MonoBehaviour
             {
                 if (pages[pageIndex][i] != null)
                 {
-                    lootButtons[i].MyIcon.sprite = pages[pageIndex][i].MyIcon;
+                    lootButtons[i].MyIcon.sprite = pages[pageIndex][i].MyItem.MyIcon;
 
-                    lootButtons[i].MyLoot = pages[pageIndex][i];
+                    lootButtons[i].MyLoot = pages[pageIndex][i].MyItem;
 
                     lootButtons[i].gameObject.SetActive(true);
 
-                    string title = string.Format("<color={0}>{1}</color>", QualityColor.MyColors[pages[pageIndex][i].MyQuality], pages[pageIndex][i].MyTitle);
+                    string title = string.Format("<color={0}>{1}</color>", QualityColor.MyColors[pages[pageIndex][i].MyItem.MyQuality], pages[pageIndex][i].MyItem.MyTitle);
 
                     lootButtons[i].MyTitle.text = title;
                 }
@@ -87,11 +87,11 @@ public class LootWindow : MonoBehaviour
        
     }
 
-    public void CreatePages(List<Item> items)
+    public void CreatePages(List<Drop> items)
     {
         if (!IsOpen)
         {
-            List<Item> page = new List<Item>();
+            List<Drop> page = new List<Drop>();
 
             droppedLoot = items;
 
@@ -102,7 +102,7 @@ public class LootWindow : MonoBehaviour
                 if (page.Count == 5 || i == items.Count - 1)
                 {
                     pages.Add(page);
-                    page = new List<Item>();
+                    page = new List<Drop>();
                 }
             }
 
@@ -142,9 +142,11 @@ public class LootWindow : MonoBehaviour
 
     public void TakeLoot(Item loot)
     {
-        droppedLoot.Remove(loot);
+        Drop drop = pages[pageIndex].Find(x => x.MyItem == loot);
 
-        pages[pageIndex].Remove(loot);
+        pages[pageIndex].Remove(drop);
+
+        drop.Remove();
 
         if (pages[pageIndex].Count == 0)
         {
@@ -161,6 +163,7 @@ public class LootWindow : MonoBehaviour
 
     public void Close()
     {
+        pageIndex = 0;
         pages.Clear();
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
