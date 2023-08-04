@@ -39,6 +39,8 @@ public class LootWindow : MonoBehaviour
     [SerializeField]
     private Item[] items;
 
+    public IInteractable MyInteractable { get; set; }
+
     [SerializeField]
     private GameObject nxtBtn, previousBtn;
 
@@ -168,6 +170,12 @@ public class LootWindow : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
         ClearButtons();
+
+        if(MyInteractable != null)
+        {
+            MyInteractable.StopInteract();
+        }
+        MyInteractable = null;
     }
 
     public void Open()

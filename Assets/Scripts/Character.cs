@@ -31,7 +31,7 @@ public class Character : MonoBehaviour
 
     public bool IsAttacking { get; set; }
 
-    protected Coroutine attackRoutine;
+    protected Coroutine actionRoutine;
 
     [SerializeField]
     protected Transform hitBox;

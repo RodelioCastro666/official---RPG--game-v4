@@ -49,6 +49,26 @@ public class Player : Character
 
     private List<IInteractable> interactables = new List<IInteractable>();
 
+
+
+    private IEnumerator GatherRoutine(string skillName, List<Drop> items)
+    {
+        Transform currentTarget = MyTarget;
+
+        Spell newSpell = SpellBook.MyInstance.CastSpell(skillName);
+
+        IsAttacking = true;
+
+        MyAnimator.SetBool("attack", IsAttacking);
+
+        yield return new WaitForSeconds(newSpell.MyCastTime);
+
+        
+        StopAttack();
+
+        LootWindow.MyInstance.CreatePages(items);
+    }
+
    public int MyGold { get; set; }
 
     public List<IInteractable> MyInteractables { get => interactables; set => interactables = value; }
@@ -230,10 +250,18 @@ public class Player : Character
 
         if (MyTarget != null && MyTarget.GetComponentInParent<Character>().IsAlive && !IsAttacking && !IsMoving && InLineOfSight())
         {
-            attackRoutine = StartCoroutine(Attack(spellName));
+            actionRoutine = StartCoroutine(Attack(spellName));
         }
 
       
+    }
+
+    public void Gather(string skillName, List<Drop> items)
+    {
+        if (!IsAttacking)
+        {
+            actionRoutine = StartCoroutine(GatherRoutine(skillName, items));
+        }
     }
     
     private bool InLineOfSight()
@@ -270,9 +298,9 @@ public class Player : Character
     {
         SpellBook.MyInstance.StopCasting();
 
-        if (attackRoutine != null)
+        if (actionRoutine != null)
         {
-            StopCoroutine(attackRoutine);
+            StopCoroutine(actionRoutine);
             IsAttacking = false;
             MyAnimator.SetBool("attack", IsAttacking);
         }

@@ -6,7 +6,7 @@ public class LootTable : MonoBehaviour
 {
 
     [SerializeField]
-    private Loot[] loot;
+    protected Loot[] loot;
 
     private bool rolled = false;
 
@@ -25,7 +25,7 @@ public class LootTable : MonoBehaviour
        
     }
 
-    private  void RollLoot()
+    protected virtual  void RollLoot()
     {
         foreach (Loot item in loot)
         {
