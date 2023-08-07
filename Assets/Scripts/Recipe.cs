@@ -20,11 +20,11 @@ public class Recipe : MonoBehaviour
     [SerializeField]
     private Image highLight;
 
-    public Item Output { get => output;  }
+    public Item OutPut { get => output;  }
 
-    public int OutputCount { get => outputCount; set => outputCount = value; }
+    public int MyOutputCount { get => outputCount; set => outputCount = value; }
 
-    public string Description { get => description;  }
+    public string MyDescription { get => description;  }
 
     public CraftingMaterial[] Materials { get => materials; }
 
