@@ -13,6 +13,9 @@ public class GatherLootTable : LootTable, IInteractable
     [SerializeField]
     private Sprite gatherSprite;
 
+    [SerializeField]
+    private GameObject gatherIndicator;
+
     private void Start()
     {
         RollLoot();
@@ -36,6 +39,7 @@ public class GatherLootTable : LootTable, IInteractable
                 }
 
                 spriteRenderer.sprite = gatherSprite;
+                gatherIndicator.SetActive(true);
             }
             else
             {
@@ -58,6 +62,7 @@ public class GatherLootTable : LootTable, IInteractable
         {
             spriteRenderer.sprite = defaultSprite;
             gameObject.SetActive(false);
+            gatherIndicator.SetActive(false);
         }
 
         LootWindow.MyInstance.Close();

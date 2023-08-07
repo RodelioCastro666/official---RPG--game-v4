@@ -49,7 +49,8 @@ public class Player : Character
 
     private List<IInteractable> interactables = new List<IInteractable>();
 
-
+    [SerializeField]
+    private Transform minimapIcon;
 
     private IEnumerator GatherRoutine(string skillName, List<Drop> items)
     {
@@ -132,7 +133,7 @@ public class Player : Character
         {
             exitIndex = 0;
             Direction += Vector2.up;
-            
+            minimapIcon.eulerAngles = new Vector3(0, 0, 0);
         }
            
 
@@ -140,6 +141,7 @@ public class Player : Character
         {
             exitIndex = 2;
             Direction += Vector2.down;
+            minimapIcon.eulerAngles = new Vector3(0, 0, 180);
         }
             
 
@@ -147,6 +149,11 @@ public class Player : Character
         {
             exitIndex = 3;
             Direction += Vector2.left;
+            if(Direction.y == 0)
+            {
+                minimapIcon.eulerAngles = new Vector3(0, 0, 90);
+            }
+
         }
            
 
@@ -154,6 +161,11 @@ public class Player : Character
         {
             exitIndex = 1;
             Direction += Vector2.right;
+
+            if(Direction.y == 0)
+            {
+                minimapIcon.eulerAngles = new Vector3(0, 0, 270); 
+            }
         }
 
         if (IsMoving)

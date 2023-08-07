@@ -10,6 +10,8 @@ public class Obstacle : MonoBehaviour , IComparable<Obstacle>
     private Color defaultColor;
     private Color fadedColor;
 
+    
+
     public int CompareTo(Obstacle other)
     {
         if (MySpriteRenderer.sortingOrder > other.MySpriteRenderer.sortingOrder)
