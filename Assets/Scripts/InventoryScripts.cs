@@ -90,6 +90,11 @@ public class InventoryScripts : MonoBehaviour
             HealthPotion potion = (HealthPotion)Instantiate(items[1]);
             AddItem(potion);
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            GoldNugget nugget = (GoldNugget)Instantiate(items[14]);
+            AddItem(nugget);
+        }
         if (Input.GetKeyDown(KeyCode.H))
         {
            
@@ -338,6 +343,25 @@ public class InventoryScripts : MonoBehaviour
         }
 
         return items;
+    }
+
+    public void RemoveItem(Item item)
+    {
+      
+
+        foreach (Bag bag in MyBags)
+        {
+
+            foreach (SlotScript slot in bag.MyBagScript.MySlots)
+            {
+                if (!slot.IsEmpty && slot.MyItem.MyTitle == item.MyTitle)
+                {
+                    slot.RemoveItem(item);
+                    break;
+                }
+            }
+        }
+
     }
 
     public Stack<IUsable> GetUsables(IUsable type) 

@@ -102,7 +102,11 @@ public class UiManager : MonoBehaviour
         {
             OpenClose(menus[3]);
         }
-        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            OpenClose(menus[6]);
+        }
+
 
 
 

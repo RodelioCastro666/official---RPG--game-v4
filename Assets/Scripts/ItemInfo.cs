@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ItemInfo : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
     [SerializeField]
     private Item item;
@@ -36,13 +36,20 @@ public class ItemInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void UpdateStackCount()
     {
-        
+        stack.text = InventoryScripts.MyInstance.GetItemCount(MyItem.MyTitle) + "/" + count.ToString();
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    
+
+    public void OnPointerUp(PointerEventData eventData)
     {
-        
+        UiManager.MyInstance.HideToolTip();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        UiManager.MyInstance.ShowToolTip(MyItem);
     }
 }

@@ -39,6 +39,11 @@ public class Player : Character
     [SerializeField]
     private Animator ding;
 
+    [SerializeField]
+    private Crafting profession;
+
+    public Coroutine MyInitRoutine { get; set; }
+
     private int exitIndex = 2;
 
     private Vector3 max, min;
@@ -52,23 +57,7 @@ public class Player : Character
     [SerializeField]
     private Transform minimapIcon;
 
-    private IEnumerator GatherRoutine(string skillName, List<Drop> items)
-    {
-        Transform currentTarget = MyTarget;
-
-        Spell newSpell = SpellBook.MyInstance.CastSpell(skillName);
-
-        IsAttacking = true;
-
-        MyAnimator.SetBool("attack", IsAttacking);
-
-        yield return new WaitForSeconds(newSpell.MyCastTime);
-
-        
-        StopAttack();
-
-        LootWindow.MyInstance.CreatePages(items);
-    }
+   
 
    public int MyGold { get; set; }
 
@@ -170,7 +159,8 @@ public class Player : Character
 
         if (IsMoving)
         {
-            StopAttack();
+            StopAction();
+            StopInit();
         }
 
         foreach (string action in KeybindManager.MyInstance.Actionbinds.Keys)
@@ -213,6 +203,14 @@ public class Player : Character
         }
     }
 
+    private void StopInit()
+    {
+        if(MyInitRoutine != null)
+        {
+            StopCoroutine(MyInitRoutine);
+        }
+    }
+
     public void UpdateLevel()
     {
         levelText.text = MyLevel.ToString();
@@ -229,53 +227,70 @@ public class Player : Character
         }
     }
 
-    private IEnumerator Attack(string spellName)
+    private IEnumerator GatherRoutine(ICastable castable, List<Drop> items)
+    { 
+        yield return actionRoutine = StartCoroutine(ActionRoutine(castable));
+
+        LootWindow.MyInstance.CreatePages(items);
+    }
+
+    private IEnumerator AttackRoutine(ICastable castable)
     {
         Transform currentTarget = MyTarget;
 
-        Spell newSpell = SpellBook.MyInstance.CastSpell(spellName);
-           
-        IsAttacking = true;
-
-        MyAnimator.SetBool("attack", IsAttacking);
-
-        yield return new WaitForSeconds(newSpell.MyCastTime);
-
+        yield return actionRoutine = StartCoroutine(ActionRoutine(castable));
+       
         if (currentTarget != null && InLineOfSight())
         {
+            Spell newSpell = SpellBook.MyInstance.GetSpell(castable.MyTitle);
+
             SpellScript s = Instantiate(newSpell.MySpellPrefab, exitPoints[exitIndex].position, Quaternion.identity).GetComponent<SpellScript>();
 
             s.Initialize(currentTarget, newSpell.MyDamage, transform);
         }
-
-           
-
-        StopAttack();
-        
-        
+ 
+        StopAction();
     }
 
-    
-    public void CastSpell(string spellName)
+    private IEnumerator ActionRoutine(ICastable castable)
+    {
+        SpellBook.MyInstance.Cast(castable);
+
+        IsAttacking = true;
+
+        MyAnimator.SetBool("attack", IsAttacking);
+
+        yield return new WaitForSeconds(castable.MyCastTime);
+
+        StopAction();
+    }
+
+    public void CastSpell(ICastable castable)
     {
         Block();
 
         if (MyTarget != null && MyTarget.GetComponentInParent<Character>().IsAlive && !IsAttacking && !IsMoving && InLineOfSight())
         {
-            actionRoutine = StartCoroutine(Attack(spellName));
+            MyInitRoutine= StartCoroutine(AttackRoutine(castable));
         }
 
       
     }
 
-    public void Gather(string skillName, List<Drop> items)
+    public void Gather(ICastable castable, List<Drop> items)
     {
         if (!IsAttacking)
         {
-            actionRoutine = StartCoroutine(GatherRoutine(skillName, items));
+            MyInitRoutine = StartCoroutine(GatherRoutine(castable, items));
         }
     }
     
+    public IEnumerator CraftRoutine(ICastable castable)
+    {
+        yield return actionRoutine = StartCoroutine(ActionRoutine(castable));
+        profession.AddItemsToInventory();
+    }
+
     private bool InLineOfSight()
     {
         if (MyTarget != null)
@@ -306,7 +321,7 @@ public class Player : Character
 
    
 
-    public  void StopAttack()
+    public  void StopAction()
     {
         SpellBook.MyInstance.StopCasting();
 
@@ -356,5 +371,6 @@ public class Player : Character
         }
     }
 
+   
 
 }

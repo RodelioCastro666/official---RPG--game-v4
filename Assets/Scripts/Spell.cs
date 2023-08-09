@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Serializable]
-public class Spell : IUsable, IMovable
- {
+public class Spell : IUsable, IMovable, ICastable
+{
 
     [SerializeField]
-    private string name;
+    private string title;
 
     [SerializeField]
     private int damage;
@@ -23,30 +23,31 @@ public class Spell : IUsable, IMovable
 
     [SerializeField]
     private float castTime;
-
     [SerializeField]
     private GameObject spellPrefab;
 
     [SerializeField]
     private Color barColor;
 
-    public string MyName { get => name;   }
+    public string MyTitle { get => title; }
 
-    public int MyDamage { get => damage;  }
+    public int MyDamage { get => damage; }
 
-    public Sprite MyIcon { get => icon;  }
+    public Sprite MyIcon { get => icon; }
 
-    public float MySpeed { get => speed;  }
+    public float MySpeed { get => speed; }
 
     public float MyCastTime { get => castTime; }
 
-    public GameObject MySpellPrefab { get => spellPrefab;  }
+    public GameObject MySpellPrefab { get => spellPrefab; }
 
-    public Color MyBarColor { get => barColor;  }
+    public Color MyBarColor { get => barColor; }
+
+    
 
     public void Use()
     {
-        Player.MyInstance.CastSpell(MyName);
+        Player.MyInstance.CastSpell(this);
     }
 }
 

@@ -56,23 +56,23 @@ public class SpellBook : MonoBehaviour
        
     }
 
-    public Spell CastSpell(string spellName)
+    public void Cast(ICastable castable)
     {
-        Spell spell = Array.Find(spells, x => x.MyName == spellName);
+       
 
-        castingBar.color = spell.MyBarColor;
+        castingBar.color = castable.MyBarColor;
 
         castingBar.fillAmount = 0;
 
-        currentSpell.text = spell.MyName;
+        currentSpell.text = castable.MyTitle;
 
-        icon.sprite = spell.MyIcon;
+        icon.sprite = castable.MyIcon;
 
-        spellRoutine = StartCoroutine(Progress(spell));
+        spellRoutine = StartCoroutine(Progress(castable));
 
         fadeRoutine = StartCoroutine(FadeBar());
 
-        return spell;
+        
     }
 
     private IEnumerator FadeBar()
@@ -93,11 +93,11 @@ public class SpellBook : MonoBehaviour
         }
     }
 
-    private  IEnumerator Progress (Spell spell)
+    private  IEnumerator Progress (ICastable castable)
     {
         float timePassed = Time.deltaTime;
 
-        float rate = 1.0f / spell.MyCastTime;
+        float rate = 1.0f / castable.MyCastTime;
 
         float progress = 0.0f;
 
@@ -109,9 +109,9 @@ public class SpellBook : MonoBehaviour
 
             timePassed += Time.deltaTime;
 
-            castTime.text = (spell.MyCastTime - timePassed).ToString("F2");
+            castTime.text = (castable.MyCastTime - timePassed).ToString("F2");
 
-            if (spell.MyCastTime - timePassed < 0)
+            if (castable.MyCastTime - timePassed < 0)
             {
                 castTime.text = "0";
             }
@@ -140,7 +140,7 @@ public class SpellBook : MonoBehaviour
 
     public Spell GetSpell(string spellName)
     {
-        Spell spell = Array.Find(spells, x => x.MyName == spellName);
+        Spell spell = Array.Find(spells, x => x.MyTitle == spellName);
 
         return spell;
     }
