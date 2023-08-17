@@ -47,7 +47,7 @@ public class Player : Character
     private int exitIndex = 2;
 
     private Vector3 max, min;
-    
+
     private List<Enemy> attackers = new List<Enemy>();
 
     private float initMana = 50;
@@ -57,15 +57,22 @@ public class Player : Character
     [SerializeField]
     private Transform minimapIcon;
 
-   
+    private Stack<Vector3> path;
 
-   public int MyGold { get; set; }
+    private Vector3 destination;
+
+    private Vector3 goal;
+
+    [SerializeField]
+    private Astar aStar;
+
+    public int MyGold { get; set; }
 
     public List<IInteractable> MyInteractables { get => interactables; set => interactables = value; }
 
     public Stat MyXp
     {
-       get => xpStat; set => xpStat = value; 
+        get => xpStat; set => xpStat = value;
     }
 
     public Stat MyMana { get => mana; set => mana = value; }
@@ -75,8 +82,9 @@ public class Player : Character
     protected override void Update()
     {
         GetInput();
+        ClickToMove();
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, min.x, max.x), Mathf.Clamp(transform.position.y, min.y, max.y),transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, min.x, max.x), Mathf.Clamp(transform.position.y, min.y, max.y), transform.position.z);
 
         base.Update();
 
@@ -91,7 +99,7 @@ public class Player : Character
         levelText.text = MyLevel.ToString();
     }
 
-    public void SetLimits(Vector3 min , Vector3 max)
+    public void SetLimits(Vector3 min, Vector3 max)
     {
         this.min = min;
         this.max = max;
@@ -124,7 +132,7 @@ public class Player : Character
             Direction += Vector2.up;
             minimapIcon.eulerAngles = new Vector3(0, 0, 0);
         }
-           
+
 
         if (Input.GetKey(KeybindManager.MyInstance.Keybinds["DOWNB"]))
         {
@@ -132,28 +140,28 @@ public class Player : Character
             Direction += Vector2.down;
             minimapIcon.eulerAngles = new Vector3(0, 0, 180);
         }
-            
+
 
         if (Input.GetKey(KeybindManager.MyInstance.Keybinds["LEFTB"]))
         {
             exitIndex = 3;
             Direction += Vector2.left;
-            if(Direction.y == 0)
+            if (Direction.y == 0)
             {
                 minimapIcon.eulerAngles = new Vector3(0, 0, 90);
             }
 
         }
-           
+
 
         if (Input.GetKey(KeybindManager.MyInstance.Keybinds["RIGHTB"]))
         {
             exitIndex = 1;
             Direction += Vector2.right;
 
-            if(Direction.y == 0)
+            if (Direction.y == 0)
             {
-                minimapIcon.eulerAngles = new Vector3(0, 0, 270); 
+                minimapIcon.eulerAngles = new Vector3(0, 0, 270);
             }
         }
 
@@ -170,8 +178,8 @@ public class Player : Character
                 UiManager.MyInstance.ClickActionButton(action);
             }
         }
-        
-            
+
+
     }
 
     public void AddAttackers(Enemy enemy)
@@ -182,7 +190,7 @@ public class Player : Character
         }
     }
 
-    private IEnumerator  Ding()
+    private IEnumerator Ding()
     {
         while (!MyXp.IsFUll)
         {
@@ -205,7 +213,7 @@ public class Player : Character
 
     private void StopInit()
     {
-        if(MyInitRoutine != null)
+        if (MyInitRoutine != null)
         {
             StopCoroutine(MyInitRoutine);
         }
@@ -220,7 +228,7 @@ public class Player : Character
     {
         MyXp.MyCurrentValue += xp;
         CombatTextManager.MyInstance.CreateText(transform.position, xp.ToString(), SCTTYPE.XP, false);
-         
+
         if (MyXp.MyCurrentValue >= MyXp.MyMaxValue)
         {
             StartCoroutine(Ding());
@@ -228,7 +236,7 @@ public class Player : Character
     }
 
     private IEnumerator GatherRoutine(ICastable castable, List<Drop> items)
-    { 
+    {
         yield return actionRoutine = StartCoroutine(ActionRoutine(castable));
 
         LootWindow.MyInstance.CreatePages(items);
@@ -239,7 +247,7 @@ public class Player : Character
         Transform currentTarget = MyTarget;
 
         yield return actionRoutine = StartCoroutine(ActionRoutine(castable));
-       
+
         if (currentTarget != null && InLineOfSight())
         {
             Spell newSpell = SpellBook.MyInstance.GetSpell(castable.MyTitle);
@@ -248,7 +256,7 @@ public class Player : Character
 
             s.Initialize(currentTarget, newSpell.MyDamage, transform);
         }
- 
+
         StopAction();
     }
 
@@ -263,6 +271,35 @@ public class Player : Character
         yield return new WaitForSeconds(castable.MyCastTime);
 
         StopAction();
+    }
+
+    public void GetPath(Vector3 goal)
+    {
+        path = aStar.Algorithm(transform.position, goal);
+        destination = path.Pop();
+        this.goal = goal;
+    }
+
+    public void ClickToMove()
+    {
+        if(path != null)
+        {
+            transform.parent.position = Vector2.MoveTowards(transform.parent.position, destination, 2 * Time.deltaTime);
+
+            float distance = Vector2.Distance(destination, transform.parent.position);
+
+            if(distance <= 0f)
+            {
+                if(path.Count > 0)
+                {
+                    destination = path.Pop();
+                }
+                else
+                {
+                    path = null;
+                }
+            }
+        }
     }
 
     public void CastSpell(ICastable castable)

@@ -15,6 +15,7 @@ public class WaterTiles : Tile
 
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
+        GameManager.MyInstance.Blocked.Add(position);
         return base.StartUp(position, tilemap, go);
     }
 

@@ -14,11 +14,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Player player;
 
+    [SerializeField]
+    private LayerMask clickableLayer, groundLayer;
 
     private Enemy currentTarget;
 
     private Camera mainCamera;
     private int targetIndex;
+
+    private HashSet<Vector3Int> blocked = new HashSet<Vector3Int>();
 
     public static GameManager MyInstance 
     { 
@@ -31,6 +35,8 @@ public class GameManager : MonoBehaviour
             return instance;
         }
     }
+
+    public HashSet<Vector3Int> Blocked { get => blocked; set => blocked = value; }
 
     private void Start()
     {
@@ -49,7 +55,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() )
         {
-            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity,512);
+            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 512);
             
             if (hit.collider != null && hit.collider.tag == "Enemy")
             {
@@ -71,7 +77,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, 512);
+            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickableLayer);
 
             if(hit.collider != null)
             {
@@ -81,9 +87,21 @@ public class GameManager : MonoBehaviour
                     entity.Interact();
 
                 }
+               
             }
-           
-            
+            else
+            {
+                hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, groundLayer);
+
+                if (hit.collider != null)
+                {
+                    player.GetPath(mainCamera.ScreenToWorldPoint(Input.mousePosition));
+                }
+
+                Debug.Log("ASTART");
+            }
+
+
         }
 
         //else if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
