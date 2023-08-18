@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+
 [RequireComponent(typeof(Animator))]
 public class Character : MonoBehaviour
 {
@@ -18,7 +18,8 @@ public class Character : MonoBehaviour
     [SerializeField]
     private int level;
 
-    private Rigidbody2D myRigidbody;
+    [SerializeField]
+    protected Rigidbody2D myRigidbody;
 
     public Transform MyTarget { get; set; }
     
@@ -72,7 +73,7 @@ public class Character : MonoBehaviour
     {
        
 
-        myRigidbody = GetComponent<Rigidbody2D>();
+       
 
         MyAnimator = GetComponent<Animator>();
 
@@ -85,20 +86,9 @@ public class Character : MonoBehaviour
         HandleLayers();
     }
 
-    private void FixedUpdate()
-    {
-        Move();
-    }
-
-    public void Move()
-    {
-        if (IsAlive)
-        {
-            myRigidbody.velocity = Direction.normalized * Speed;
-        }
-
-      
-    }
+   
+    
+    
 
     public void GetHealth(int health)
     {

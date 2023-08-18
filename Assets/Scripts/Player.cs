@@ -61,6 +61,8 @@ public class Player : Character
 
     private Vector3 destination;
 
+    private Vector3 current;
+
     private Vector3 goal;
 
     [SerializeField]
@@ -90,6 +92,11 @@ public class Player : Character
 
     }
 
+    protected void FixedUpdate()
+    {
+        Move();
+    }
+
     public void SetDefaultValues()
     {
         MyGold = 10000;
@@ -104,6 +111,8 @@ public class Player : Character
         this.min = min;
         this.max = max;
     }
+
+    
 
     public void GetInput()
     {
@@ -276,6 +285,7 @@ public class Player : Character
     public void GetPath(Vector3 goal)
     {
         path = aStar.Algorithm(transform.position, goal);
+        current = path.Pop();
         destination = path.Pop();
         this.goal = goal;
     }
@@ -286,12 +296,39 @@ public class Player : Character
         {
             transform.parent.position = Vector2.MoveTowards(transform.parent.position, destination, 2 * Time.deltaTime);
 
+            Vector3Int dest = aStar.MyTilemap.WorldToCell(destination);
+            Vector3Int cur = aStar.MyTilemap.WorldToCell(current);
+
+           
+
             float distance = Vector2.Distance(destination, transform.parent.position);
+
+            if(cur.y > dest.y)
+            {
+                Direction = Vector2.down;
+            }
+            else if(cur.y < dest.y)
+            {
+                Direction = Vector2.up;
+            }
+            if(cur.y == dest.y)
+            {
+                if(cur.x > dest.x)
+                {
+                    Direction = Vector2.left;
+                }
+                else if(cur.x < dest.x)
+                {
+                    Direction = Vector2.right;
+                }
+            }
+
 
             if(distance <= 0f)
             {
                 if(path.Count > 0)
                 {
+                    current = destination;
                     destination = path.Pop();
                 }
                 else
@@ -302,6 +339,20 @@ public class Player : Character
         }
     }
 
+    public  void Move()
+    {
+        if(path == null)
+        {
+            if (IsAlive)
+            {
+                myRigidbody.velocity = Direction.normalized * Speed;
+            }
+        }
+
+       
+
+
+    }
     public void CastSpell(ICastable castable)
     {
         Block();

@@ -28,7 +28,7 @@ class IdleState : IState
 
         if (parent.MyTarget != null)
         {
-            parent.ChangeState(new FollowState());
+            parent.ChangeState(new PathState());
         }
     }
 }

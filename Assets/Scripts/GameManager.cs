@@ -55,8 +55,10 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() )
         {
-            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 512);
-            
+            Debug.Log("HEloooo");
+
+            RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickableLayer);
+
             if (hit.collider != null && hit.collider.tag == "Enemy")
             {
                 DeselectTarget();
@@ -75,7 +77,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        else if (Input.GetMouseButtonDown(1) && !EventSystem.current.IsPointerOverGameObject())
         {
             RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickableLayer);
 
@@ -98,7 +100,7 @@ public class GameManager : MonoBehaviour
                     player.GetPath(mainCamera.ScreenToWorldPoint(Input.mousePosition));
                 }
 
-                Debug.Log("ASTART");
+                
             }
 
 

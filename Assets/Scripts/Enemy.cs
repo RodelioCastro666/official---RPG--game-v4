@@ -22,6 +22,9 @@ public class Enemy : Character, IInteractable
     [SerializeField]
     private LootTable lootTable;
 
+    [SerializeField]
+    private Astar astar;
+
     public Vector3 MyStartPosition { get; set; }
 
     public float MyAggroRange { get; set;  }
@@ -45,6 +48,9 @@ public class Enemy : Character, IInteractable
     private Sprite portrait;
 
     public Sprite MyPortrait { get => portrait; }
+
+
+    public Astar MyAstar { get => astar;  }
 
     protected override void Update()
     {

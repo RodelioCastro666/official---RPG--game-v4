@@ -25,17 +25,29 @@ public class Astar : MonoBehaviour
 
     private Dictionary<Vector3Int, Node> allNodes = new Dictionary<Vector3Int, Node>();
 
+    private static HashSet<Vector3Int> noDiagonalTiles = new HashSet<Vector3Int>();
+
+    public Tilemap MyTilemap { get => tilemap; }
+
+    public static HashSet<Vector3Int> NoDiagonalTiles { get => noDiagonalTiles; }
 
     public Stack<Vector3> Algorithm(Vector3 start, Vector3 goal)
     {
-        startPos = tilemap.WorldToCell(start);
-        goalPos = tilemap.WorldToCell(goal);
+        startPos = MyTilemap.WorldToCell(start);
+        goalPos = MyTilemap.WorldToCell(goal);
 
         current = GetNode(startPos);
 
         openList = new HashSet<Node>();
 
         closedList = new HashSet<Node>();
+
+        foreach(KeyValuePair<Vector3Int, Node> node in allNodes)
+        {
+            node.Value.Parent = null;
+        }
+
+        allNodes.Clear();
 
         openList.Add(current);
 
@@ -118,6 +130,11 @@ public class Astar : MonoBehaviour
             }
 
             int gScore = DetermineGScore(neighbors[i].Position, current.Position);
+
+            if (gScore == 14 && NoDiagonalTiles.Contains(neighbor.Position) && NoDiagonalTiles.Contains(current.Position))
+            {
+                continue;
+            }
 
             if (openList.Contains(neighbor))
             {
@@ -248,9 +265,9 @@ public class Astar : MonoBehaviour
         {
             Stack<Vector3> finalpath = new Stack<Vector3>();
 
-            while(current.Position != startPos)
+            while(current != null)
             {
-                finalpath.Push(tilemap.CellToWorld(current.Position));   
+                finalpath.Push(MyTilemap.CellToWorld(current.Position));   
 
                 current = current.Parent;
             }
