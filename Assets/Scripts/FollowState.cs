@@ -9,6 +9,8 @@ class FollowState : IState
 {
     private Enemy parent;
 
+    private Vector3 offset;
+
     public void Enter(Enemy parent)
     {
         Player.MyInstance.AddAttackers(parent);
@@ -26,12 +28,33 @@ class FollowState : IState
 
         if (parent.MyTarget != null)
         {
-            parent.Direction = (parent.MyTarget.transform.position - parent.transform.position).normalized;
-            parent.transform.position = Vector2.MoveTowards(parent.transform.position, parent.MyTarget.position, parent.Speed * Time.deltaTime);
+            parent.Direction = ((parent.MyTarget.transform.position + offset) - parent.transform.position).normalized;
+           
 
-            float distance = Vector2.Distance(parent.MyTarget.position, parent.transform.position);
+            float distance = Vector2.Distance(parent.MyTarget.position + offset, parent.transform.position);
 
-            if(distance <= parent.MyAttackRange)
+            string animName = parent.MySpriteRenderer.sprite.name;
+
+
+
+            if (animName.Contains("right"))
+            {
+                offset = new Vector3(0.5f, 0.8f);
+            }
+            else if (animName.Contains("left"))
+            {
+                offset = new Vector3(-0.5f, 0.8f);
+            }
+            else if (animName.Contains("up"))
+            {
+                offset = new Vector3(0f, 1.2f);
+            }
+            else if (animName.Contains("down"))
+            {
+                offset = new Vector3(0f, 0);
+            }
+
+            if (distance <= parent.MyAttackRange)
             {
                 parent.ChangeState(new AttackState());
             }

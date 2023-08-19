@@ -8,11 +8,13 @@ public class AttackState : IState
 
     private float attackCooldown = 3;
 
-    private float extraRange = .1f;
+    private float extraRange = .5f;
 
     public void Enter(Enemy parent)
     {
         this.parent = parent;
+        parent.MyRigidbody.velocity = Vector2.zero;
+        parent.Direction = Vector2.zero;
     }
 
     public void Exit()
@@ -31,7 +33,7 @@ public class AttackState : IState
 
         if (parent.MyTarget != null)
         {
-            float distance = Vector2.Distance(parent.MyTarget.position, parent.transform.position);
+            float distance = Vector2.Distance(parent.MyTarget.parent.position, parent.transform.parent.position);
 
             if (distance >= parent.MyAttackRange + extraRange && !parent.IsAttacking)
             {
@@ -55,3 +57,4 @@ public class AttackState : IState
         parent.IsAttacking = false;
     }
 }
+  

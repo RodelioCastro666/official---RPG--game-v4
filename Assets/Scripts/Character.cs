@@ -19,7 +19,9 @@ public class Character : MonoBehaviour
     private int level;
 
     [SerializeField]
-    protected Rigidbody2D myRigidbody;
+    private Rigidbody2D myRigidbody;
+
+    
 
     public Transform MyTarget { get; set; }
     
@@ -28,7 +30,7 @@ public class Character : MonoBehaviour
     [SerializeField]
     protected float initHealth;
 
-   
+   public Stack<Vector3> MyPath { get; set; }
 
     public bool IsAttacking { get; set; }
 
@@ -69,6 +71,12 @@ public class Character : MonoBehaviour
 
     public int MyLevel { get => level; set => level = value; }
 
+    public Transform MyCurrenTile { get; set; }
+
+    public Rigidbody2D MyRigidbody { get => myRigidbody;  }
+
+    public SpriteRenderer MySpriteRenderer { get; set; }
+
     protected virtual void Start()
     {
        
@@ -76,19 +84,33 @@ public class Character : MonoBehaviour
        
 
         MyAnimator = GetComponent<Animator>();
-
+        MySpriteRenderer = GetComponent<SpriteRenderer>();
         
     }
 
-    
+    public void FixedUpdate()
+    {
+        Move();
+    }
+
     protected virtual void Update()
     {
         HandleLayers();
     }
 
-   
-    
-    
+    public void Move()
+    {
+        if (MyPath == null)
+        {
+            if (IsAlive)
+            {
+                MyRigidbody.velocity = Direction.normalized * Speed;
+            }
+        }
+
+    }
+
+
 
     public void GetHealth(int health)
     {
@@ -153,8 +175,8 @@ public class Character : MonoBehaviour
         if (health.MyCurrentValue <= 0)
         {
 
-            myRigidbody.velocity = Direction;
-            myRigidbody.velocity = Direction;
+            MyRigidbody.velocity = Direction;
+            MyRigidbody.velocity = Direction;
             GameManager.MyInstance.OnKillConfirmed(this);
             MyAnimator.SetTrigger("die");
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathState : IState
 {
-    private Stack<Vector3> path;
+   
 
     private Vector3 destination;
 
@@ -16,35 +16,51 @@ public class PathState : IState
 
     private Enemy parent;
 
+    private Vector3 targetPos;
+
     public void Enter(Enemy parent)
     {
         this.parent = parent;
 
-        this.transform = parent.transform;
+        this.transform = parent.transform.parent;
 
-        path = parent.MyAstar.Algorithm(parent.transform.parent.position, parent.MyTarget.position);
+        targetPos = Player.MyInstance.MyCurrenTile.position;
 
-        current = path.Pop();
-        destination = path.Pop();
-        this.goal = parent.MyTarget.parent.position;
+        if(targetPos != parent.MyCurrenTile.position)
+        {
+            parent.MyPath = parent.MyAstar.Algorithm(parent.MyCurrenTile.position, targetPos);
+        }
+        if(parent.MyPath != null)
+        {
+            current = parent.MyPath.Pop();
+            destination = parent.MyPath.Pop();
+            this.goal = parent.MyCurrenTile.position;
+        }
+        else
+        {
+            parent.ChangeState(new EvadeState());
+        }
+
        
     }
 
     public void Exit()
     {
-      
+        parent.MyPath = null;
     }
 
     public void Update()
     {
-        if(path != null)
+        if(parent.MyPath != null)
         {
-            transform.parent.position = Vector2.MoveTowards(transform.parent.position, destination, 2 * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, destination, 2 * Time.deltaTime);
 
-            Vector3Int dest = parent.MyAstar.MyTilemap.WorldToCell(destination);
+            Vector3Int dest = parent.MyAstar.MyTilemap.WorldToCell(destination); 
             Vector3Int cur = parent.MyAstar.MyTilemap.WorldToCell(current);
 
-            float distance = Vector2.Distance(destination, transform.parent.position);
+            float distance = Vector2.Distance(destination, transform.position);
+
+            float totalDistance = Vector2.Distance(parent.MyTarget.position, transform.position);
 
             if (cur.y > dest.y)
             {
@@ -66,17 +82,32 @@ public class PathState : IState
                 }
             }
 
+            if(totalDistance <= parent.MyAttackRange)
+            {
+                parent.ChangeState(new AttackState()); 
+            }
+
+            else if(Player.MyInstance.MyCurrenTile.position == parent.MyCurrenTile.position)
+            {
+                parent.ChangeState(new FollowState());
+            }
             if (distance <= 0f)
             {
-                if(path.Count > 0)
+                if(parent.MyPath.Count > 0)
                 {
                     current = destination;
-                    destination = path.Pop();
+                    destination = parent.MyPath.Pop();
+
+                    if(targetPos != Player.MyInstance.MyCurrenTile.position)
+                    {
+                        parent.ChangeState(new PathState());
+                    }
 
                 }
                 else
                 {
-                    path = null;
+                    parent.MyPath = null;
+                    parent.ChangeState(new PathState());
                 }
             }
         }

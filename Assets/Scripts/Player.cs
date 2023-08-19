@@ -57,7 +57,7 @@ public class Player : Character
     [SerializeField]
     private Transform minimapIcon;
 
-    private Stack<Vector3> path;
+    
 
     private Vector3 destination;
 
@@ -92,10 +92,7 @@ public class Player : Character
 
     }
 
-    protected void FixedUpdate()
-    {
-        Move();
-    }
+    
 
     public void SetDefaultValues()
     {
@@ -284,15 +281,15 @@ public class Player : Character
 
     public void GetPath(Vector3 goal)
     {
-        path = aStar.Algorithm(transform.position, goal);
-        current = path.Pop();
-        destination = path.Pop();
+        MyPath = aStar.Algorithm(transform.position, goal);
+        current = MyPath.Pop();
+        destination = MyPath.Pop();
         this.goal = goal;
     }
 
     public void ClickToMove()
     {
-        if(path != null)
+        if(MyPath != null)
         {
             transform.parent.position = Vector2.MoveTowards(transform.parent.position, destination, 2 * Time.deltaTime);
 
@@ -326,33 +323,20 @@ public class Player : Character
 
             if(distance <= 0f)
             {
-                if(path.Count > 0)
+                if(MyPath.Count > 0)
                 {
                     current = destination;
-                    destination = path.Pop();
+                    destination = MyPath.Pop();
                 }
                 else
                 {
-                    path = null;
+                    MyPath = null;
                 }
             }
         }
     }
 
-    public  void Move()
-    {
-        if(path == null)
-        {
-            if (IsAlive)
-            {
-                myRigidbody.velocity = Direction.normalized * Speed;
-            }
-        }
-
-       
-
-
-    }
+   
     public void CastSpell(ICastable castable)
     {
         Block();

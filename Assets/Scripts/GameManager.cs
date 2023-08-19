@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        else if (Input.GetMouseButtonDown(1) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, clickableLayer);
 
