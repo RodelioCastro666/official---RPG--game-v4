@@ -25,6 +25,14 @@ public class Enemy : Character, IInteractable
     [SerializeField]
     private Astar astar;
 
+    [SerializeField]
+    private LayerMask losMask;
+
+    [SerializeField]
+    private int damage;
+
+    private bool canDoDamage = true;
+
     public Vector3 MyStartPosition { get; set; }
 
     public float MyAggroRange { get; set;  }
@@ -63,6 +71,10 @@ public class Enemy : Character, IInteractable
 
             currentState.Update();
 
+            if(MyTarget != null && !Player.MyInstance.IsAlive)
+            {
+                ChangeState(new EvadeState());
+            }
            
         }
         base.Update();
@@ -86,6 +98,19 @@ public class Enemy : Character, IInteractable
         
     }
    
+    public void DoDamage()
+    {
+        if (canDoDamage)
+        {
+            Player.MyInstance.TakeDamage(damage, transform);
+            canDoDamage = false;
+        }
+    }
+
+    public void CanDoDamage()
+    {
+        canDoDamage = true;
+    }
 
     public override void TakeDamage(float damage, Transform source)
     {
@@ -195,5 +220,18 @@ public class Enemy : Character, IInteractable
         }
 
         Destroy(gameObject);
+    }
+
+    public bool CanSeePlayer()
+    {
+        Vector3 targetDirection = (MyTarget.transform.position - transform.position).normalized;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, targetDirection, Vector2.Distance(transform.position, MyTarget.transform.position), losMask);
+
+        if(hit.collider != null)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

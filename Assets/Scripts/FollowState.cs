@@ -15,11 +15,13 @@ class FollowState : IState
     {
         Player.MyInstance.AddAttackers(parent);
         this.parent = parent;
+        parent.MyPath = null; 
     }
 
     public void Exit()
     {
         parent.Direction = Vector2.zero;
+        parent.MyRigidbody.velocity = Vector2.zero;
     }
 
     public void Update()
@@ -62,6 +64,10 @@ class FollowState : IState
         if (!parent.InRange)
         {
             parent.ChangeState(new EvadeState());
+        }
+        else if (!parent.CanSeePlayer())
+        {
+            parent.ChangeState(new PathState());
         }
     }   
 }

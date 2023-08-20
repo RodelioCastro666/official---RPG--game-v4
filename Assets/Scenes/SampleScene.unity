@@ -12131,7 +12131,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1975
+    m_Bits: 10167
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -25725,6 +25725,18 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1788624741}
+    - target: {fileID: 4503425241527346820, guid: dfe96f53f09d3c24ba964c3407088528, type: 3}
+      propertyPath: damage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503425241527346820, guid: dfe96f53f09d3c24ba964c3407088528, type: 3}
+      propertyPath: myRigidbody
+      value: 
+      objectReference: {fileID: 1579759400}
+    - target: {fileID: 4503425241527346820, guid: dfe96f53f09d3c24ba964c3407088528, type: 3}
+      propertyPath: losMask.m_Bits
+      value: 8192
+      objectReference: {fileID: 0}
     - target: {fileID: 4503425241527346822, guid: dfe96f53f09d3c24ba964c3407088528, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -25773,7 +25785,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4503425241527346818, guid: dfe96f53f09d3c24ba964c3407088528, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: dfe96f53f09d3c24ba964c3407088528, type: 3}
 --- !u!4 &1503873514 stripped
 Transform:
@@ -26928,6 +26941,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1579759399}
+  - component: {fileID: 1579759400}
   m_Layer: 0
   m_Name: EnemyParent
   m_TagString: Untagged
@@ -26951,6 +26965,27 @@ Transform:
   m_Father: {fileID: 832833991}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1579759400
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579759398}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &1584686623
 GameObject:
   m_ObjectHideFlags: 0
@@ -28100,7 +28135,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3072
+    m_Bits: 11264
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: ac7ad849249d0054ea20d37fcb4cc62e, type: 2}
   m_TargetDisplay: 0
@@ -36095,7 +36130,7 @@ GameObject:
   - component: {fileID: 1992909346}
   - component: {fileID: 1992909345}
   - component: {fileID: 1992909347}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: WaterMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36229,7 +36264,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 28
+      m_TileSpriteIndex: 24
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -36279,7 +36314,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 28
+      m_TileSpriteIndex: 27
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -36339,7 +36374,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 27
+      m_TileSpriteIndex: 28
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -36460,15 +36495,15 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: 11f1046a472b48e45b555f6399c52f7c, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: 21300000, guid: 27281aacda2074a42ab73f9eed548dd2, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: 21300000, guid: dfcd200cab44d9847948abd6a96c4108, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 21300000, guid: 11f1046a472b48e45b555f6399c52f7c, type: 3}
-  - m_RefCount: 5
+    m_Data: {fileID: 21300000, guid: ba06a4d18c98f5741aa1c426e546763d, type: 3}
+  - m_RefCount: 4
     m_Data: {fileID: 21300000, guid: 24e0eacb551f5394eb721a806b4d4533, type: 3}
   - m_RefCount: 2
     m_Data: {fileID: 21300000, guid: 2f5b371d083680c41aa02310851824f7, type: 3}
@@ -39321,6 +39356,10 @@ PrefabInstance:
       propertyPath: levelText
       value: 
       objectReference: {fileID: 1333343347}
+    - target: {fileID: 6079357569136266307, guid: afbe2315e1aa7034d85dbf7fbfa5af3b, type: 3}
+      propertyPath: initHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6079357569136266307, guid: afbe2315e1aa7034d85dbf7fbfa5af3b, type: 3}
       propertyPath: profession
       value: 
