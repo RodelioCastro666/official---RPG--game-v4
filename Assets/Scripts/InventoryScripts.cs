@@ -63,7 +63,7 @@ public class InventoryScripts : MonoBehaviour
     {
         Bag bag = (Bag)Instantiate(items[0]);
         bag.Initialized(16);
-        bag.Use();
+     //   bag.Use();
 
 
 

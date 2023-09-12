@@ -73,7 +73,7 @@ public class Enemy : Character, IInteractable
 
             if(MyTarget != null && !Player.MyInstance.IsAlive)
             {
-                ChangeState(new EvadeState());
+                ChangeState(new EvadeState()); 
             }
            
         }
